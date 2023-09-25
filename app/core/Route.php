@@ -1,6 +1,7 @@
 <?php
 
 namespace core;
+use \core\Controller;
 
 class Route {
 //    private static string $controller_name = "Home";
@@ -26,6 +27,7 @@ class Route {
         "redirect" => null
     ];
     private static $warning_controller_name = "Warning";
+    private static $maintenance_controller_name = "Maintenance";
     private static array $uri_paths_custom;
     private static array $real_uri_paths;
 
@@ -154,10 +156,7 @@ class Route {
 
     private static function requestUriExist(string $uri_path_route) : bool {
         $uri_exist = self::checkCustomUriPath($uri_path_route);
-        // get key params
-        if ($uri_exist) {
-            self::$route_active = $uri_path_route;
-        }
+        if ($uri_exist) self::$route_active = $uri_path_route;
         return $uri_exist;
     }
 
@@ -182,6 +181,13 @@ class Route {
 
             break;
         }
+    }
+
+    public static function maintenanceMode() {
+        self::$controller_name = self::$maintenance_controller_name;
+        self::defineControllerClass();
+        call_user_func_array([self::$controller, self::$method_name], self::$params);
+        die();
     }
 
     public static function run() : void {
