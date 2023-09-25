@@ -1,0 +1,183 @@
+{
+    "meta": {
+        "description": ""
+    },
+    "students": [
+        {
+            "presence": "01",
+            "id": "2234638709",
+            "full_name": "ADITYA RIZAL HENDRAWAN"
+        },
+        {
+            "presence": "02",
+            "id": "2234639710",
+            "full_name": "AHMAD DAHLAN NURYANA"
+        },
+        {
+            "presence": "03",
+            "id": "2234640711",
+            "full_name": "AHMAD ZULFHAKHAR ALI AZIS"
+        },
+        {
+            "presence": "04",
+            "id": "2234641712",
+            "full_name": "ANDHIKASATYA REZA NOORFADLI"
+        },
+        {
+            "presence": "05",
+            "id": "2234642713",
+            "full_name": "ARFIAN MUHAMMAD FAREL"
+        },
+        {
+            "presence": "06",
+            "id": "2234643714",
+            "full_name": "ARYA DARREN SETIADI"
+        },
+        {
+            "presence": "07",
+            "id": "2234644715",
+            "full_name": "BEBY KURNIAWAN"
+        },
+        {
+            "presence": "08",
+            "id": "2234645716",
+            "full_name": "CHRISDION DITO ANGGER PAMENANG"
+        },
+        {
+            "presence": "09",
+            "id": "2234646717",
+            "full_name": "DANNDIFADILA ARRASIKHUUNA HERWANTO"
+        },
+        {
+            "presence": "10",
+            "id": "2234647718",
+            "full_name": "ELANG JORDAN PASHA BUWANA"
+        },
+        {
+            "presence": "11",
+            "id": "2234648719",
+            "full_name": "FERDINAND OKTAVIANO ADINATA PUTRA"
+        },
+        {
+            "presence": "12",
+            "id": "2234649720",
+            "full_name": "FITRIANA CAHYANINGTYAS"
+        },
+        {
+            "presence": "13",
+            "id": "2234650721",
+            "full_name": "JHUANES SEPTINUS"
+        },
+        {
+            "presence": "14",
+            "id": "2234651722",
+            "full_name": "JIZDHAN ARIF RIZKYANANDA RAMADHAN"
+        },
+        {
+            "presence": "15",
+            "id": "2234652723",
+            "full_name": "JOSEPH APHINDATIO JUSWITAMA"
+        },
+        {
+            "presence": "16",
+            "id": "2234653724",
+            "full_name": "KEVIN AVISYENA DARAMA"
+        },
+        {
+            "presence": "17",
+            "id": "2234654725",
+            "full_name": "KHALIF RAHMAN"
+        },
+        {
+            "presence": "18",
+            "id": "2234655726",
+            "full_name": "KHANSA LATIFAH"
+        },
+        {
+            "presence": "19",
+            "id": "2234656727",
+            "full_name": "KHUSNUDON ABDI RAKHMAN"
+        },
+        {
+            "presence": "20",
+            "id": "2234657728",
+            "full_name": "MIRZA JAKA ADITYA"
+        },
+        {
+            "presence": "21",
+            "id": "2234658729",
+            "full_name": "MOURA JUAN CHESARIANO"
+        },
+        {
+            "presence": "22",
+            "id": "2234659730",
+            "full_name": "MUHAMMAD FACHRI"
+        },
+        {
+            "presence": "23",
+            "id": "2234660731",
+            "full_name": "MUHAMMAD ISLAMI PASHA"
+        },
+        {
+            "presence": "24",
+            "id": "2234661732",
+            "full_name": "NABILLA FEBIA NINGTYAS"
+        },
+        {
+            "presence": "25",
+            "id": "2234662733",
+            "full_name": "NASYWA NISRINA BUNGA AYUDYA WIBOWO"
+        },
+        {
+            "presence": "26",
+            "id": "2234663734",
+            "full_name": "NUR AGIL ALMUNAWAR"
+        },
+        {
+            "presence": "27",
+            "id": "2234664735",
+            "full_name": "PASHA FAHRULUDDIN"
+        },
+        {
+            "presence": "28",
+            "id": "2234665736",
+            "full_name": "PAUL DAVID DJUKARDI"
+        },
+        {
+            "presence": "29",
+            "id": "2234666737",
+            "full_name": "PRAFASTANGA HILMI KRISNA FAUZI"
+        },
+        {
+            "presence": "30",
+            "id": "2234667738",
+            "full_name": "RAKAN NAFIS ALWANI"
+        },
+        {
+            "presence": "31",
+            "id": "2234668739",
+            "full_name": "RASTAMAN REGGA PRATAMA"
+        },
+        {
+            "presence": "32",
+            "id": "2234669740",
+            "full_name": "RIZKI KURNIAWAN"
+        },
+        {
+            "presence": "33",
+            "id": "2234670741",
+            "full_name": "SAMUEL CHRISTHOPHEER MULYAWAN SANTOSA"
+        },
+        {
+            "presence": "34",
+            "id": "2234671742",
+            "full_name": "SHODIQ IMAWAN"
+        },
+        {
+            "presence": "35",
+            "id": "2234672743",
+            "full_name": "TIRTA HAKIM PAMBUDHI"
+        }
+    ],
+    "students_length": 35
+}

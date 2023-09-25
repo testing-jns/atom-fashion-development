@@ -1,0 +1,16 @@
+{
+    "name": "jns23/mini_project",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "core\\": "core/",
+            "models\\": "models/",
+            "plugins\\": "plugins/",
+            "middlewares\\": "middlewares/"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.8",
+        "google/apiclient": "^2.15"
+    }
+}

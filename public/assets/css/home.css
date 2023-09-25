@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    margin-top: 2em;
+    border: 1px solid;
+    border-radius: 0.5em;
+    padding: 2em;
+    width: 80%;
+}
+
+header h1 {
+    text-align: center;
+}
+
+main {
+    margin-top: 2em;
+    width: 100%;
+    /* border: 1px solid; */
+}
+
+main .table_name {
+    text-align: center;
+    margin-bottom: .7em;
+}
+
+main .infomation {
+    width: 90%;
+    margin: auto;
+    /* border: 1px solid; */
+    margin-bottom: 1em;
+}
+
+main .infomation tbody tr th {
+    font-size: 1.2em;
+    padding: .4em;
+}
+
+main .infomation tbody tr td {
+    padding: 0 .2em;
+}
+
+main table.sija-students {
+    margin: auto;
+}
+
+main table.sija-students tbody tr td {
+    padding: .3em;
+}
+
+main table.sija-students tbody tr td.presence, 
+main table.sija-students tbody tr td.semicolon {
+    text-align: center;
+}
+
+main table.sija-students tbody tr td.presence {
+    width: 5%;
+}
+main table.sija-students tbody tr td.name {
+    width: 42%;
+}
+main table.sija-students tbody tr td.semicolon {
+    width: 3%;
+}
+main table.sija-students tbody tr td.link {
+    width: 50%;
+}
+
+main table.sija-students tbody tr td.link a {
+    text-decoration: none;
+}
+
+main .action {
+    padding: 2em 1em 0 1em;
+    margin: auto;
+    width: 90%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+/* Removing WaterMark*/
+#turnkey-credit {
+    display: none;
+}
+
+
+
+
+@media screen and (max-width: 500px) {
+    body {
+        padding: 0;
+    }
+
+    .container {
+        margin-top: 1em;
+        width: 92%;
+        padding: .5em;
+        margin-bottom: 1.5em;
+        padding-bottom: 1em;
+    }
+
+   header h1 {
+       font-size: 1.5em;
+       margin-top: 1em;
+   }
+
+    main table.sija-students {
+        font-size: .6em;
+    }
+
+    main table.sija-students tbody tr td {
+        padding: .5em;
+    }
+}
+
+@media screen and (max-width: 750px) and (min-width: 500px) {
+    body {
+        padding: 0;
+    }
+    .container {
+        margin-top: 1.5em;
+        width: 88%;
+        padding: 1em;
+        margin-bottom: 1.5em;
+        padding-bottom: 1em;
+    }
+    main table.sija-students {
+        font-size: .8em;
+    }
+}

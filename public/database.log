@@ -1,0 +1,91 @@
+Datetime : 2023 09 21 - 12:31:10 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:32:14 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:33:34 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:52 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:53 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:53 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:53 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:53 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:54 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:54 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:54 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:55 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:55 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:55 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:55 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:55 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:56 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:56 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:56 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:56 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:34:57 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:12 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:14 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:15 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:15 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:15 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:15 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:15 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:16 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 12:37:16 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] Connection refused 
+Datetime : 2023 09 21 - 14:22:44 Asia/Jakarta 
+Message : SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'jhuanesjns23@gmail.com' for key 'customers.email' 
+Datetime : 2023 09 22 - 09:37:17 Asia/Jakarta 
+Message : SQLSTATE[HY000]: General error: 1364 Field 'picture' doesn't have a default value 
+Datetime : 2023 09 22 - 09:39:29 Asia/Jakarta 
+Message : SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'dgdr@rtdrt.etr' for key 'customers.email' 
+Datetime : 2023 09 22 - 21:59:25 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:04:01 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:04:05 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:05:17 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:06:02 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:08:50 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:08:54 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:32:04 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:32:08 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:37:34 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:38:28 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
+Datetime : 2023 09 22 - 22:44:37 Asia/Jakarta 
+Message : SQLSTATE[HY000] [1045] Access denied for user 'root'@'192.168.1.4' (using password: YES) 
+
