@@ -9,6 +9,7 @@ use \core\Route;
 
 # Don't forget to create a  class file in controller
 
+// Route::maintenanceMode();
 
 Route::add("GET", "/");
 Route::add("GET", "/about");

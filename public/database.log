@@ -88,4 +88,14 @@ Message : SQLSTATE[HY000] [2002] No connection could be made because the target 
 Message : SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it 
 Datetime : 2023 09 22 - 22:44:37 Asia/Jakarta 
 Message : SQLSTATE[HY000] [1045] Access denied for user 'root'@'192.168.1.4' (using password: YES) 
+Datetime : 2023 09 25 - 10:48:00 Asia/Jakarta 
+Message : could not find driver 
+Datetime : 2023 09 25 - 13:29:28 Asia/Jakarta 
+Message : could not find driver 
+Datetime : 2023 09 25 - 13:31:20 Asia/Jakarta 
+Message : could not find driver 
+Datetime : 2023 09 25 - 13:33:22 Asia/Jakarta 
+Message : could not find driver 
+Datetime : 2023 09 25 - 13:39:55 Asia/Jakarta 
+Message : could not find driver 
 
