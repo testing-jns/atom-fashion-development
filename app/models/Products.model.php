@@ -15,13 +15,16 @@ class Products {
         $total_files = count($_FILES["files"]["tmp_name"]);
 
         $success_insert_blobs = array_filter($_FILES["files"]["tmp_name"] , function($value) use($thumbnail_id) {
-            $binary_file = file_get_contents($value);
+            $image_name = custom_random(28) . ".png";
+            $image_path = PATH_APP . "../public/assets/img/products/";
+            move_uploaded_file($value, $image_path . $image_name);
+
             $sql = "INSERT INTO thumbnails VALUES (:id, :image)";
             $payloads = [
                 ":id" => $thumbnail_id,
-                ":image" => $binary_file
+                ":image" => $image_name
             ];
-            $success = $this->db->query($sql)->bindValue($payloads)->execute()->rowCount();
+            $success = $this->db->query($sql)->bindValue($payloads)->execute()->status();
 
             return boolval($success);
         });

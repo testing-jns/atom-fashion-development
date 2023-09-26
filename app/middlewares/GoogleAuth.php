@@ -7,20 +7,24 @@ use Google\Service\Oauth2;
 class GoogleAuth {
     private static $google_client;
     private static $success = false;
+    private static $redirect_types = [
+        "SIGNUP" => GOOGLE_AUTH_REDIRECT_URI_FOR_SIGNUP,
+        "LOGIN" => GOOGLE_AUTH_REDIRECT_URI_FOR_LOGIN,
+    ];
 
-    private static function initialize() {
+    private static function initialize($type) {
         self::$google_client = new Client();
 
         self::$google_client->setClientId(GOOGLE_CLIENT_ID);
         self::$google_client->setClientSecret(GOOGLE_CLIENT_SECRET);
-        self::$google_client->setRedirectUri(GOOGLE_AUTH_REDIRECT_URI);
+        self::$google_client->setRedirectUri(self::$redirect_types[$type]);
 
         self::$google_client->addScope("profile");
         self::$google_client->addScope("email");
     }
 
-    public static function getAuthUrl() {
-        self::initialize();
+    public static function getAuthUrl($type) {
+        self::initialize($type);
         return self::$google_client->createAuthUrl();
     }
 
@@ -32,8 +36,8 @@ class GoogleAuth {
         return $reponses;
     }
     
-    public static function verify($code) {
-        self::initialize();
+    public static function verify($type, $code) {
+        self::initialize($type);
         $token = self::$google_client->fetchAccessTokenWithAuthCode($code);
         
         if (!empty($token["error"])) return self::response();

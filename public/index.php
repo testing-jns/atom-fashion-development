@@ -19,11 +19,10 @@ Route::add(["GET", "POST"], "/search/{item}");
 Route::add("GET", "/verify/{key}");
 Route::add("GET", "/admin", "/admin/dash");
 Route::add("GET", "/admin/dash");
-Route::add(["GET", "POST"], "/admin/add/product");
+Route::add(["GET", "POST"], "/admin/add/{item}");
 Route::add("ALL", "/admin/add", "/admin");
-Route::add("GET", "/account/{id}/settings/privacy/");
-Route::add("GET", "/products/{code}/detail/{detail}");
-
+Route::add("GET", "/user", "/user/settings");
+Route::add("GET", "/user/settings");
 
 
 

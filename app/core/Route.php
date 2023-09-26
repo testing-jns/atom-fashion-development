@@ -12,7 +12,7 @@ class Route {
 //    private static array $routes = [];
 //    private static string $warning_controller_name = "Warning";
 
-    private static $controller_name = "Home";
+    private static $controller_name = "HomeController";
     private static $controller;
     private static $method_name = "index";
     private static $real_uri_path;
@@ -26,8 +26,8 @@ class Route {
         "uri_path" => "/",
         "redirect" => null
     ];
-    private static $warning_controller_name = "Warning";
-    private static $maintenance_controller_name = "Maintenance";
+    private static $warning_controller_name = "WarningController";
+    private static $maintenance_controller_name = "MaintenanceController";
     private static array $uri_paths_custom;
     private static array $real_uri_paths;
 
@@ -79,8 +79,8 @@ class Route {
             return;
         }
 
-        if (file_exists(PATH_APP . "controllers/" . ucfirst(self::$uri_dispart_path[0]) . ".php")) {
-            self::$controller_name = ucfirst(self::$uri_dispart_path[0]);
+        if (file_exists(PATH_APP . "controllers/" . ucfirst(self::$uri_dispart_path[0]) . "Controller.php")) {
+            self::$controller_name = ucfirst(self::$uri_dispart_path[0]) . "Controller";
             unset(self::$uri_dispart_path[0]);
         }
 

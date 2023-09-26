@@ -8,7 +8,7 @@ require_once(PATH_APP ."/views/mailer/template.php");
 
 class Mailler {
     private static $mail;
-    private static $status = false;
+    private static $success = false;
     private static function initialize($target, $url_verify) {
         self::$mail = new PHPMailer(true);
 
@@ -32,7 +32,7 @@ class Mailler {
     private static function execute() {
         try {
             self::$mail->send();
-            self::$status = true;
+            self::$success = true;
         } catch (Exception $exception) {
             // create logs
             // self::logs()
@@ -40,7 +40,7 @@ class Mailler {
     }
 
     private static function response() {
-        return ["success" => self::$status];
+        return ["success" => self::$success];
     }
 
     public static function run($target, $url_verify) {

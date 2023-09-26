@@ -1,10 +1,5 @@
 <?php 
 
-function custom_random(int $length = 32) : string {
-  if ($length % 2 === 0) return bin2hex(random_bytes($length / 2));
-  throw new Exception("Can't use odd numbers");
-}
-
 $product_code = "PROD_" . strtoupper(custom_random(18));
 
 ?>
@@ -547,12 +542,12 @@ $product_code = "PROD_" . strtoupper(custom_random(18));
             
                       <div class="input-field">
                         <label>Discount</label>
-                        <input type="number" name="discount" placeholder="Product Discount in Percent" min="0" required>
+                        <input type="number" name="discount" placeholder="Product Discount in Percent" min="0" value="0" required>
                       </div>
             
                       <div class="input-field">
                         <label>Max Purchase</label>
-                        <input type="number" name="max_purchase" placeholder="Product Max Purchase" min="0" required>
+                        <input type="number" name="max_purchase" placeholder="Product Max Purchase" min="0" value="0" required>
                       </div>
             
                       <div class="input-field">

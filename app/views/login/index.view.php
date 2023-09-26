@@ -1,3 +1,7 @@
+<?php 
+use \middlewares\GoogleAuth; 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -33,7 +37,7 @@
               <a href="#" class="social-icon">
                 <i class="fab fa-twitter"></i>
               </a> -->
-              <a href="./google-auth" class="social-icon">
+              <a href="<?= GoogleAuth::getAuthUrl("LOGIN"); ?>" class="social-icon">
                 <i class="fab fa-google"></i>
               </a>
               <!-- <a href="#" class="social-icon">
@@ -73,6 +77,9 @@
         </div>
       </div>
     </div>
+
+    <div class="google-auth-response" data-action="<?= $view_data["meta"]["action"] ?? ""; ?>" data-success="<?= json_encode($view_data["result"]["success"] ?? ""); ?>" data-message="<?= $view_data["result"]["error_mess"] ?? ""; ?>" data-email="<?= $view_data["result"]["email"] ?? ""; ?>"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= BASE_URL ?>assets/js/account/login.js"></script>
   </body>

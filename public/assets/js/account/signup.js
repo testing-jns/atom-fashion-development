@@ -8,18 +8,29 @@ const confirm_password = document.querySelector(".confirm_password")
 document.addEventListener("DOMContentLoaded", () => {
   const google_auth_response = document.querySelector(".google-auth-response");
 
-  if (google_auth_response.dataset.success === "true") {
+  if (google_auth_response.dataset.success === "") return;
+
+  if (google_auth_response.dataset.success !== "true") {
     Swal.fire({
-      icon: "success",
-      title: "Succes Sign Up!",
-      text: `Welcome!`,
-      confirmButtonText: "HOME"
+      icon: "error",
+      title: "Oops...",
+      text: google_auth_response.dataset.message,
     }).then(() => {
-      setInterval(() => {
-        location.href = "/"
-      }, 200);
-    })
+      location.href = document.location.pathname
+    });
+    return
   }
+
+  Swal.fire({
+    icon: "success",
+    title: "Success Sign Up!",
+    html: `Please check your email <u>${email_field.value}</u>. Expires in 1 day. Thankyou!`
+  }).then(() => {
+    setInterval(() => {
+      location.href = "/"
+    }, 200);
+  })
+
 })
 
 form.addEventListener("submit", e => {
@@ -73,13 +84,17 @@ form.addEventListener("submit", e => {
           icon: "error",
           title: "Oops...",
           text: response.result.error_mess,
+        }).then(() => {
+          setInterval(() => {
+            location.href = document.location.pathname
+          }, 200);
         })
-        return;
+        return
       };
 
       Swal.fire({
         icon: "success",
-        title: "Succes Sign Up!",
+        title: "Success Sign Up!",
         html: `Please check your email <u>${email_field.value}</u>. Expires in 1 day. Thankyou!`
       }).then(() => {
         setInterval(() => {

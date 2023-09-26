@@ -4,7 +4,7 @@ namespace plugins;
 
 class VerifyEmail {
     private static $db;
-    private static $status = false;
+    private static $success = false;
     private static $error_mess = "";
 
 
@@ -42,11 +42,11 @@ class VerifyEmail {
             return;
         }
 
-        self::$status = true;
+        self::$success = true;
     }
     private static function response() {
-        $response = ["success" => self::$status];
-        if (!self::$status) {
+        $response = ["success" => self::$success];
+        if (!self::$success) {
             $response["error_mess"] = self::$error_mess;
         }
 
