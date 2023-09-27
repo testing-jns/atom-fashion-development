@@ -98,4 +98,12 @@ Message : could not find driver
 Message : could not find driver 
 Datetime : 2023 09 25 - 13:39:55 Asia/Jakarta 
 Message : could not find driver 
+Datetime : 2023 09 27 - 08:10:53 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond 
+Datetime : 2023 09 27 - 12:59:56 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond 
+Datetime : 2023 09 27 - 13:00:17 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond 
+Datetime : 2023 09 27 - 13:01:21 Asia/Jakarta 
+Message : SQLSTATE[HY000] [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond 
 

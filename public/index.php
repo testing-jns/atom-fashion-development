@@ -26,6 +26,9 @@ Route::add("GET", "/user/settings");
 
 
 
+Route::add("GET", "/admin/show/{item}");
+Route::add("GET", "/admin/show", "/admin");
+
 
 
 

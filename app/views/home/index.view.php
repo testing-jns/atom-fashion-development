@@ -1,3 +1,15 @@
+<?php 
+use \middlewares\GoogleAuth;
+use \middlewares\CookieManager;
+
+$result = CookieManager::get();
+
+var_dump($result["success"]);
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -236,7 +248,9 @@
           </button>
 
           <button class="action-btn">
-            <i class="bi bi-person-circle"></i>
+            <img src="<?= BASE_URL . "assets/img/users/" . "068dd677f9862040b6b3a1aa4f25.png"; ?>" width="45" style="border-radius: 100%;">
+            <!-- BASE_URL . "assets/img/users/" . "068dd677f9862040b6b3a1aa4f25.png" -->
+            <!-- <i class="bi bi-person-circle"></i> -->
             <!-- account image -->
             <!-- <ion-icon name="bag-handle-outline"></ion-icon> -->
           </button>
@@ -3591,8 +3605,7 @@
 		<div class="content">
       <div class="form login">
                 <div class="form-content">
-                    <!-- <header>Login</header> -->
-                    <form action="/login" method="POST">
+                    <form action="" class="form-quick-login" method="POST">
                         <div class="field input-field">
                             <input type="email" placeholder="Email" class="input" required>
                         </div>
@@ -3614,7 +3627,7 @@
 
                 <div class="line"></div>
                 <div class="media-options">
-                    <a href="#" class="field google">
+                    <a href="<?= GoogleAuth::getAuthUrl("LOGIN"); ?>" class="field google">
                         <img src="./assets/img/home/google.png" alt="" class="google-img">
                         <span>Login with Google</span>
                     </a>
@@ -3668,6 +3681,8 @@ scrollContainer.addEventListener("wheel", (evt) => {
     function close_button() {
       quick_login_popup.classList.remove("active")
     }
+
+    // form-quick-login
   </script>
 
 

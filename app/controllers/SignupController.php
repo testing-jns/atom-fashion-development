@@ -1,6 +1,7 @@
 <?php 
 
 use core\Controller;
+use middlewares\CookieManager;
 
 class SignupController extends Controller {
     public function index(...$args) : void {

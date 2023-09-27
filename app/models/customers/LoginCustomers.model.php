@@ -3,6 +3,7 @@
 require_once PATH_APP . "models/Customers.model.php";
 
 use \middlewares\GoogleAuth;
+use \middlewares\CookieManager;
 
 class LoginCustomers extends Customers {
     private $password;
@@ -83,6 +84,8 @@ class LoginCustomers extends Customers {
         if (!$this->isEmailActivated()) return $this;
         if (!$this->isPasswordMatch()) return $this;
 
+        CookieManager::set($this->email, "customer");
+
         $this->query_status = true;
         return $this;
     }
@@ -108,6 +111,8 @@ class LoginCustomers extends Customers {
         $this->email = $google_auth_response["results"]["email"];
         
         if (!$this->isEmailExistWithLoginGoogleAuth()) return $this;
+
+        CookieManager::set($this->email, "customer");
 
         $this->query_status = true;
         return $this;

@@ -45,7 +45,7 @@
     .container form{
         position: relative;
         margin-top: 16px;
-        min-height: 70vh;
+        min-height: 100vh;
         /* min-height: 500px; */
         /* height: auto; */
         /* min-height: auto; */

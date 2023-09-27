@@ -31,14 +31,15 @@ class AdminController extends Controller {
             die($response);
         }
 
-        
         $this->view("admin/add/{$args['item']}");
+    }
+    public function show(...$args) : void {
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && $args["item"] === "products") {
+            $response = $this->model("products")->action("show")->json();
+            die($response);
+        }
 
-        // $this->render_templates(function() use($args) {
-        //     $this->view("admin/add/{$args[0]}/css-custom");
-        //     $this->view("admin/add/{$args[0]}/index");
-        //     $this->view("admin/add/{$args[0]}/js-custom");
-        // });
+        $this->view("admin/show/{$args['item']}");
     }
 
 }
