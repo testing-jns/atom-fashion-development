@@ -1,7 +1,7 @@
 <?php
 
 namespace core;
-use \core\Controller;
+use \core\Database;
 
 class Route {
 //    private static string $controller_name = "Home";
@@ -46,6 +46,12 @@ class Route {
     private static function parseURL() : void {
         $uri_path = $_SERVER["REQUEST_URI"];
         $uri_parsing = parse_url($uri_path);
+
+        if (empty($uri_parsing["path"])) {
+            self::$real_uri_path = false;
+            return;
+        }
+
         parse_str($uri_parsing["query"] ?? "", self::$params_query);
         if ($uri_parsing["path"] === "/") {
             self::$real_uri_path = "/";
@@ -188,6 +194,11 @@ class Route {
         self::defineControllerClass();
         call_user_func_array([self::$controller, self::$method_name], self::$params);
         die();
+    }
+
+    public static function databaseHandler() {
+        $db = new Database();
+        if (!$db->databaseConnection()) self::maintenanceMode();
     }
 
     public static function run() : void {

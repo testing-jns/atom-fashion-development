@@ -1,10 +1,27 @@
-<?php 
+<?php
 use \middlewares\GoogleAuth;
-use \middlewares\CookieManager;
+use core\Controller;
 
-$result = CookieManager::get();
+$controll = new Controller();
 
-var_dump($result["success"]);
+$display_products = $controll->model("products/DisplayProducts");
+
+$category_list = $display_products->categoryList();
+$best_sellers = $display_products->bestSellers();
+$new_arrivals = $display_products->newArrivals();
+$trending = $display_products->trending();
+$top_rated = $display_products->topRated();
+$deal_of_the_day = $display_products->dealOfTheDay();
+$mini_products_gallery = $display_products->miniProductsGallery();
+
+if ($view_data["results"]["success"]) {
+  $customer_info = $controll->model("customers/InfoCustomers");
+  $total_wishlist = $customer_info->execute()->getTotalProductInWishlist();
+  $total_cart = $customer_info->execute()->getTotalProductInCart();
+}
+
+
+
 
 ?>
 
@@ -28,7 +45,6 @@ var_dump($result["success"]);
     - custom css link
   -->
   <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home/style-prefix.css">
-  <!-- <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home/style-prefix.css"> -->
 
   <!--
     - google font link
@@ -75,14 +91,14 @@ var_dump($result["success"]);
 
       <div class="newsletter">
 
-        <form action="#">
+        <form action="" method="POST">
 
           <div class="newsletter-header">
 
             <h3 class="newsletter-title">Subscribe Newsletter.</h3>
 
             <p class="newsletter-desc">
-              Subscribe the <b>Atom</b> to get latest products and discount update.
+              Subscribe the <b>Atom Fashion</b> to get latest products and discount update.
             </p>
 
           </div>
@@ -144,8 +160,7 @@ var_dump($result["success"]);
   -->
 
   <header>
-
-    <div class="header-top">
+    <div class="header-top" style="<?= $view_data["results"]["success"] ? "display: none" : ""; ?>">
 
       <div class="container">
 
@@ -180,33 +195,18 @@ var_dump($result["success"]);
         <div class="header-alert-news">
           <p>
             <b>Free Shipping</b>
-            This Week Order Over - $55
+            This Week Order Over - Rp. 500 K
           </p>
         </div>
 
         <div class="header-top-actions">
-
-          <!-- <select name="currency">
-
-            <option value="usd">USD &dollar;</option>
-            <option value="eur">EUR &euro;</option>
-
-          </select>
-
-          <select name="language">
-
-            <option value="en-US">English</option>
-            <option value="es-ES">Espa&ntilde;ol</option>
-            <option value="fr">Fran&ccedil;ais</option>
-
-          </select> -->
           <div type="button" class="button-action-about me-2 fs-4" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
-        data-bs-title="This top tooltip is themed via CSS variables." onclick="location.href = '/about'">
+        data-bs-title="This top tooltip is themed via CSS variables." onclick="location.href = '<?= BASE_URL ?>about'">
             <i class="bi bi-info-circle"></i>
             <span class="tooltiptext">About Atom Fashion</span>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-success" onclick="location.href = '/login'">LogIn</button>
-          <button type="button" class="btn btn-sm btn-success btn-outline-white" onclick="location.href = '/signup'">SignUp</button>
+          <button type="button" class="btn btn-sm btn-outline-success" onclick="location.href = '<?= BASE_URL ?>login'">LogIn</button>
+          <button type="button" class="btn btn-sm btn-success btn-outline-white" onclick="location.href = '<?= BASE_URL ?>signup'">SignUp</button>
         </div>
 
       </div>
@@ -217,7 +217,7 @@ var_dump($result["success"]);
 
       <div class="container">
 
-        <a href="#" class="header-logo">
+        <a href="<?= BASE_URL ?>" class="header-logo">
           <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/logo/logo.svg" alt="Atom's logo" width="120" height="36">
         </a>
 
@@ -237,22 +237,26 @@ var_dump($result["success"]);
 
 
           <!-- tambahin quick_login kalo user blm login -->
-          <button class="action-btn" onclick="quick_login()">
+          <button class="action-btn" onclick="<?= $view_data["results"]["success"] ? "location.href = '" . BASE_URL . "user/wishlist'" : "quick_login()"; ?>">
             <i class="bi bi-heart"></i>
-            <span class="count">0</span>
+            <?php if ($view_data["results"]["success"]): ?>
+                <span class="count wishlist-quantity"><?= $total_wishlist; ?></span>
+            <?php endif; ?>
           </button>
 
-          <button class="action-btn" onclick="quick_login()">
+          <button class="action-btn" onclick="<?= $view_data["results"]["success"] ? "location.href ='" . BASE_URL . "user/cart'" : "quick_login()"; ?>">
             <i class="bi bi-cart"></i>
-            <span class="count">0</span>
+            <?php if ($view_data["results"]["success"]): ?>
+                <span class="count cart-quantity"><?= $total_cart; ?></span>
+            <?php endif; ?>
           </button>
 
-          <button class="action-btn">
-            <img src="<?= BASE_URL . "assets/img/users/" . "068dd677f9862040b6b3a1aa4f25.png"; ?>" width="45" style="border-radius: 100%;">
-            <!-- BASE_URL . "assets/img/users/" . "068dd677f9862040b6b3a1aa4f25.png" -->
-            <!-- <i class="bi bi-person-circle"></i> -->
-            <!-- account image -->
-            <!-- <ion-icon name="bag-handle-outline"></ion-icon> -->
+          <button class="action-btn" onclick="location.href = '<?= BASE_URL ?>user/settings'">
+            <?php if (!empty($view_data["results"]["picture"])): ?>
+                  <img src="<?= BASE_URL . "assets/img/users/" . $view_data["results"]["picture"]; ?>" width="45" style="border-radius: 100%;">
+            <?php else: ?>
+                  <i class="bi bi-person-circle"></i>
+              <?php endif; ?>
           </button>
 
         </div>
@@ -268,77 +272,72 @@ var_dump($result["success"]);
         <ul class="desktop-menu-category-list">
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Home</a>
+            <a href="<?= BASE_URL ?>" class="menu-title">Home</a>
           </li>
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Categories</a>
+            <a href="<?= BASE_URL ?>products" class="menu-title">Categories</a>
 
             <div class="dropdown-panel">
-
               <ul class="dropdown-panel-list">
 
                 <li class="menu-title">
-                  <a href="#">Electronics</a>
+                  <a href="<?= BASE_URL ?>products">All</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Desktop</a>
+                  <a href="<?= BASE_URL ?>products">Formal</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Laptop</a>
+                  <a href="<?= BASE_URL ?>products">Casual</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Camera</a>
+                  <a href="<?= BASE_URL ?>products">Sports</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Tablet</a>
+                  <a href="<?= BASE_URL ?>products">Jacket</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Headphone</a>
+                  <a href="<?= BASE_URL ?>products">Sunglasses</a>
                 </li>
+                <li>
 
-                <li class="panel-list-item">
-                  <a href="#">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/electronics-banner-1.jpg" alt="headphone collection" width="250"
-                      height="119">
-                  </a>
                 </li>
-
               </ul>
-
+              
+              
               <ul class="dropdown-panel-list">
 
                 <li class="menu-title">
-                  <a href="#">Men's</a>
+                  <a href="<?= BASE_URL ?>category/man">Men's</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Formal</a>
+                  <a href="<?= BASE_URL ?>category/man">Formal</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Casual</a>
+                  <a href="<?= BASE_URL ?>category/man">Casual</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Sports</a>
+                  <a href="<?= BASE_URL ?>category/man">Sports</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Jacket</a>
+                  <a href="<?= BASE_URL ?>category/man">Jacket</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Sunglasses</a>
+                  <a href="<?= BASE_URL ?>category/man">Sunglasses</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">
+                  <a href="<?= BASE_URL ?>category/man">
                     <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/mens-banner.jpg" alt="men's fashion" width="250" height="119">
                   </a>
                 </li>
@@ -348,66 +347,32 @@ var_dump($result["success"]);
               <ul class="dropdown-panel-list">
 
                 <li class="menu-title">
-                  <a href="#">Women's</a>
+                  <a href="<?= BASE_URL ?>category/woman">Women's</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Formal</a>
+                  <a href="<?= BASE_URL ?>category/woman">Formal</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Casual</a>
+                  <a href="<?= BASE_URL ?>category/woman">Casual</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Perfume</a>
+                  <a href="<?= BASE_URL ?>category/woman">Perfume</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Cosmetics</a>
+                  <a href="<?= BASE_URL ?>category/woman">Cosmetics</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">Bags</a>
+                  <a href="<?= BASE_URL ?>category/woman">Bags</a>
                 </li>
 
                 <li class="panel-list-item">
-                  <a href="#">
+                  <a href="<?= BASE_URL ?>category/woman">
                     <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/womens-banner.jpg" alt="women's fashion" width="250" height="119">
-                  </a>
-                </li>
-
-              </ul>
-
-              <ul class="dropdown-panel-list">
-
-                <li class="menu-title">
-                  <a href="#">Electronics</a>
-                </li>
-
-                <li class="panel-list-item">
-                  <a href="#">Smart Watch</a>
-                </li>
-
-                <li class="panel-list-item">
-                  <a href="#">Smart TV</a>
-                </li>
-
-                <li class="panel-list-item">
-                  <a href="#">Keyboard</a>
-                </li>
-
-                <li class="panel-list-item">
-                  <a href="#">Mouse</a>
-                </li>
-
-                <li class="panel-list-item">
-                  <a href="#">Microphone</a>
-                </li>
-
-                <li class="panel-list-item">
-                  <a href="#">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/electronics-banner-2.jpg" alt="mouse collection" width="250" height="119">
                   </a>
                 </li>
 
@@ -417,107 +382,107 @@ var_dump($result["success"]);
           </li>
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Men's</a>
+            <a href="<?= BASE_URL ?>products" class="menu-title">PRODUCTS</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="<?= BASE_URL ?>category/man" class="menu-title">Men's</a>
 
             <ul class="dropdown-list">
 
               <li class="dropdown-item">
-                <a href="#">Shirt</a>
+                <a href="<?= BASE_URL ?>category/man">Shirt</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Shorts & Jeans</a>
+                <a href="<?= BASE_URL ?>category/man">Shorts & Jeans</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Safety Shoes</a>
+                <a href="<?= BASE_URL ?>category/man">Safety Shoes</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Wallet</a>
+                <a href="<?= BASE_URL ?>category/man">Wallet</a>
               </li>
 
             </ul>
           </li>
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Women's</a>
+            <a href="<?= BASE_URL ?>category/woman" class="menu-title">Women's</a>
 
             <ul class="dropdown-list">
 
               <li class="dropdown-item">
-                <a href="#">Dress & Frock</a>
+                <a href="<?= BASE_URL ?>category/woman">Dress & Frock</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Earrings</a>
+                <a href="<?= BASE_URL ?>category/woman">Earrings</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Necklace</a>
+                <a href="<?= BASE_URL ?>category/woman">Necklace</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Makeup Kit</a>
+                <a href="<?= BASE_URL ?>category/woman">Makeup Kit</a>
               </li>
 
             </ul>
           </li>
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Accessories</a>
+            <a href="<?= BASE_URL ?>category/accessories" class="menu-title">Accessories</a>
 
             <ul class="dropdown-list">
 
               <li class="dropdown-item">
-                <a href="#">Earrings</a>
+                <a href="<?= BASE_URL ?>category/accessories">Earrings</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Couple Rings</a>
+                <a href="<?= BASE_URL ?>category/accessories">Couple Rings</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Necklace</a>
+                <a href="<?= BASE_URL ?>category/accessories">Necklace</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Bracelets</a>
+                <a href="<?= BASE_URL ?>category/accessories">Bracelets</a>
               </li>
 
             </ul>
           </li>
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Perfume</a>
+            <a href="<?= BASE_URL ?>category/perfume" class="menu-title">Perfume</a>
 
             <ul class="dropdown-list">
 
               <li class="dropdown-item">
-                <a href="#">Clothes Perfume</a>
+                <a href="<?= BASE_URL ?>category/perfume">Clothes Perfume</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Deodorant</a>
+                <a href="<?= BASE_URL ?>category/perfume">Deodorant</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Flower Fragrance</a>
+                <a href="<?= BASE_URL ?>category/perfume">Flower Fragrance</a>
               </li>
 
               <li class="dropdown-item">
-                <a href="#">Air Freshener</a>
+                <a href="<?= BASE_URL ?>category/perfume">Air Freshener</a>
               </li>
 
             </ul>
           </li>
 
           <li class="menu-category">
-            <a href="#" class="menu-title">Blog</a>
-          </li>
-
-          <li class="menu-category">
-            <a href="#" class="menu-title">Hot Offers</a>
+            <a href="<?= BASE_URL ?>blog" class="menu-title">Blog</a>
           </li>
 
         </ul>
@@ -532,20 +497,24 @@ var_dump($result["success"]);
         <ion-icon name="menu-outline"></ion-icon>
       </button>
 
-      <button class="action-btn">
+      <button class="action-btn" onclick="<?= $view_data["results"]["success"] ? "location.href = '" . BASE_URL . "user/cart'" : "quick_login()"; ?>">
         <ion-icon name="bag-handle-outline"></ion-icon>
 
-        <span class="count">0</span>
+        <?php if ($view_data["results"]["success"]): ?>
+                <span class="count">0</span>
+            <?php endif; ?>
       </button>
 
-      <button class="action-btn">
+      <button class="action-btn" onclick="<?= $view_data["results"]["success"] ? "location.href = '" . BASE_URL . "user/settings'" : "quick_login()"; ?>">
         <ion-icon name="home-outline"></ion-icon>
       </button>
 
-      <button class="action-btn">
+      <button class="action-btn" onclick="<?= $view_data["results"]["success"] ? "location.href = '" . BASE_URL . "user/wishlist'" : "quick_login()"; ?>">
         <ion-icon name="heart-outline"></ion-icon>
 
-        <span class="count">0</span>
+        <?php if ($view_data["results"]["success"]): ?>
+                <span class="count">0</span>
+            <?php endif; ?>
       </button>
 
       <button class="action-btn" data-mobile-menu-open-btn>
@@ -554,7 +523,7 @@ var_dump($result["success"]);
 
     </div>
 
-    <nav class="mobile-navigation-menu  has-scrollbar" data-mobile-menu>
+    <nav class="mobile-navigation-menu has-scrollbar" data-mobile-menu>
 
       <div class="menu-top">
         <h2 class="menu-title">Menu</h2>
@@ -827,10 +796,10 @@ var_dump($result["success"]);
               <h2 class="banner-title">Women's latest fashion sale</h2>
 
               <p class="banner-text">
-                starting at &dollar; <b>20</b>.00
+                Starting at Rp. <b>100K</b>
               </p>
 
-              <a href="#" class="banner-btn">Shop now</a>
+              <a href="<?= BASE_URL ?>products" class="banner-btn">Shop now</a>
 
             </div>
 
@@ -847,10 +816,10 @@ var_dump($result["success"]);
               <h2 class="banner-title">Modern sunglasses</h2>
 
               <p class="banner-text">
-                starting at &dollar; <b>15</b>.00
+                Starting at Rp. <b>70K</b>
               </p>
 
-              <a href="#" class="banner-btn">Shop now</a>
+              <a href="<?= BASE_URL ?>products" class="banner-btn">Shop now</a>
 
             </div>
 
@@ -867,10 +836,10 @@ var_dump($result["success"]);
               <h2 class="banner-title">New fashion summer sale</h2>
 
               <p class="banner-text">
-                starting at &dollar; <b>29</b>.99
+                Starting at Rp. <b>120K</b>
               </p>
 
-              <a href="#" class="banner-btn">Shop now</a>
+              <a href="<?= BASE_URL ?>products" class="banner-btn">Shop now</a>
 
             </div>
 
@@ -896,165 +865,28 @@ var_dump($result["success"]);
 
         <div class="category-item-container has-scrollbar">
 
-          <div class="category-item">
+        <?php foreach ($category_list as $value): ?>
 
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/dress.svg" alt="dress & frock" width="30">
-            </div>
+              <div class="category-item">
 
-            <div class="category-content-box">
+                <a href="<?= BASE_URL ?>category/<?= $value->category ?>" class="category-img-box">
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/menu-category/icons/<?= $value->category ?>.svg" alt="<?= $value->category ?>" width="30">
+                </a>
 
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Dress & frock</h3>
+                <div class="category-content-box">
 
-                <p class="category-item-amount">(53)</p>
+                  <a href="<?= BASE_URL ?>category/<?= $value->category ?>" class="category-content-flex">
+                    <h3 class="category-item-title"><?= $value->category ?></h3>
+                    <p class="category-item-amount">(<?= $value->total ?>)</p>
+                  </a>
+
+                  <a href="<?= BASE_URL ?>category/<?= $value->category ?>" class="category-btn">Show all</a>
+
+                </div>
+
               </div>
 
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/coat.svg" alt="winter wear" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Winter wear</h3>
-
-                <p class="category-item-amount">(58)</p>
-              </div>
-
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/glasses.svg" alt="glasses & lens" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Glasses & lens</h3>
-
-                <p class="category-item-amount">(68)</p>
-              </div>
-
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/shorts.svg" alt="shorts & jeans" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Shorts & jeans</h3>
-
-                <p class="category-item-amount">(84)</p>
-              </div>
-
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/tee.svg" alt="t-shirts" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">T-shirts</h3>
-
-                <p class="category-item-amount">(35)</p>
-              </div>
-
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/jacket.svg" alt="jacket" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Jacket</h3>
-
-                <p class="category-item-amount">(16)</p>
-              </div>
-
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/watch.svg" alt="watch" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Watch</h3>
-
-                <p class="category-item-amount">(27)</p>
-              </div>
-
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/hat.svg" alt="hat & caps" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Hat & caps</h3>
-
-                <p class="category-item-amount">(39)</p>
-              </div>
-
-              <a href="#" class="category-btn">Show all</a>
-
-            </div>
-
-          </div>
+          <?php endforeach; ?>
 
         </div>
 
@@ -1073,13 +905,9 @@ var_dump($result["success"]);
     <div class="product-container">
 
       <div class="container">
+        
 
-
-        <!--
-          - SIDEBAR
-        -->
-
-        <div class="sidebar  has-scrollbar" data-mobile-menu>
+        <div class="sidebar has-scrollbar" data-mobile-menu>
 
           <div class="sidebar-category">
 
@@ -1114,28 +942,28 @@ var_dump($result["success"]);
                 <ul class="sidebar-submenu-category-list" data-accordion>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/clothes" class="sidebar-submenu-title">
                       <p class="product-name">Shirt</p>
                       <data value="300" class="stock" title="Available Stock">300</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/clothes" class="sidebar-submenu-title">
                       <p class="product-name">shorts & jeans</p>
                       <data value="60" class="stock" title="Available Stock">60</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/clothes" class="sidebar-submenu-title">
                       <p class="product-name">jacket</p>
                       <data value="50" class="stock" title="Available Stock">50</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/clothes" class="sidebar-submenu-title">
                       <p class="product-name">dress & frock</p>
                       <data value="87" class="stock" title="Available Stock">87</data>
                     </a>
@@ -1166,28 +994,28 @@ var_dump($result["success"]);
                 <ul class="sidebar-submenu-category-list" data-accordion>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/footwear" class="sidebar-submenu-title">
                       <p class="product-name">Sports</p>
                       <data value="45" class="stock" title="Available Stock">45</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/footwear" class="sidebar-submenu-title">
                       <p class="product-name">Formal</p>
                       <data value="75" class="stock" title="Available Stock">75</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/footwear" class="sidebar-submenu-title">
                       <p class="product-name">Casual</p>
                       <data value="35" class="stock" title="Available Stock">35</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/footwear" class="sidebar-submenu-title">
                       <p class="product-name">Safety Shoes</p>
                       <data value="26" class="stock" title="Available Stock">26</data>
                     </a>
@@ -1218,21 +1046,21 @@ var_dump($result["success"]);
                 <ul class="sidebar-submenu-category-list" data-accordion>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/accessories" class="sidebar-submenu-title">
                       <p class="product-name">Earrings</p>
                       <data value="46" class="stock" title="Available Stock">46</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/accessories" class="sidebar-submenu-title">
                       <p class="product-name">Couple Rings</p>
                       <data value="73" class="stock" title="Available Stock">73</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/accessories" class="sidebar-submenu-title">
                       <p class="product-name">Necklace</p>
                       <data value="61" class="stock" title="Available Stock">61</data>
                     </a>
@@ -1263,28 +1091,28 @@ var_dump($result["success"]);
                 <ul class="sidebar-submenu-category-list" data-accordion>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/perfume" class="sidebar-submenu-title">
                       <p class="product-name">Clothes Perfume</p>
                       <data value="12" class="stock" title="Available Stock">12 pcs</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/perfume" class="sidebar-submenu-title">
                       <p class="product-name">Deodorant</p>
                       <data value="60" class="stock" title="Available Stock">60 pcs</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/perfume" class="sidebar-submenu-title">
                       <p class="product-name">jacket</p>
                       <data value="50" class="stock" title="Available Stock">50 pcs</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/perfume" class="sidebar-submenu-title">
                       <p class="product-name">dress & frock</p>
                       <data value="87" class="stock" title="Available Stock">87 pcs</data>
                     </a>
@@ -1315,28 +1143,28 @@ var_dump($result["success"]);
                 <ul class="sidebar-submenu-category-list" data-accordion>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/cosmetics" class="sidebar-submenu-title">
                       <p class="product-name">Shampoo</p>
                       <data value="68" class="stock" title="Available Stock">68</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/cosmetics" class="sidebar-submenu-title">
                       <p class="product-name">Sunscreen</p>
                       <data value="46" class="stock" title="Available Stock">46</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/cosmetics" class="sidebar-submenu-title">
                       <p class="product-name">Body Wash</p>
                       <data value="79" class="stock" title="Available Stock">79</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/cosmetics" class="sidebar-submenu-title">
                       <p class="product-name">Makeup Kit</p>
                       <data value="23" class="stock" title="Available Stock">23</data>
                     </a>
@@ -1367,14 +1195,14 @@ var_dump($result["success"]);
                 <ul class="sidebar-submenu-category-list" data-accordion>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/glasses" class="sidebar-submenu-title">
                       <p class="product-name">Sunglasses</p>
                       <data value="50" class="stock" title="Available Stock">50</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/glasses" class="sidebar-submenu-title">
                       <p class="product-name">Lenses</p>
                       <data value="48" class="stock" title="Available Stock">48</data>
                     </a>
@@ -1404,28 +1232,28 @@ var_dump($result["success"]);
                 <ul class="sidebar-submenu-category-list" data-accordion>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/bags" class="sidebar-submenu-title">
                       <p class="product-name">Shopping Bag</p>
                       <data value="62" class="stock" title="Available Stock">62</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/bags" class="sidebar-submenu-title">
                       <p class="product-name">Gym Backpack</p>
                       <data value="35" class="stock" title="Available Stock">35</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/bags" class="sidebar-submenu-title">
                       <p class="product-name">Purse</p>
                       <data value="80" class="stock" title="Available Stock">80</data>
                     </a>
                   </li>
 
                   <li class="sidebar-submenu-category">
-                    <a href="#" class="sidebar-submenu-title">
+                    <a href="<?= BASE_URL ?>category/bags" class="sidebar-submenu-title">
                       <p class="product-name">Wallet</p>
                       <data value="75" class="stock" title="Available Stock">75</data>
                     </a>
@@ -1447,129 +1275,46 @@ var_dump($result["success"]);
 
               <div class="showcase-container">
 
+                <?php foreach ($best_sellers as $item) : ?>
                 <div class="showcase">
 
-                  <a href="#" class="showcase-img-box">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/1.jpg" alt="baby fabric shoes" width="75" height="75"
-                      class="showcase-img">
+                  <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-img-box">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/products/<?= $display_products->getProductImages($item->thumbnail_id); ?>" alt="<?= $item->name; ?>" width="75" height="75" class="showcase-img">
                   </a>
 
-                  <div class="showcase-content">
 
-                    <a href="#">
-                      <h4 class="showcase-title">baby fabric shoes</h4>
+
+
+                  <div class="showcase-content">
+                    <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>">
+                      <h4 class="showcase-title"><?= $item->name; ?></h4>
                     </a>
 
                     <div class="showcase-rating">
+                      <?php 
+                      $max_rating = 5;
+                      ?>
+                      <?php for ($i = 1; $i <= $item->rating; $i++) : ?>
                       <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
+                      <?php endfor; ?>
+                      <?php for ($i = $item->rating; $i < $max_rating; $i++) : ?>
+                        <ion-icon name="star-outline"></ion-icon>
+                      <?php endfor; ?>
                     </div>
 
                     <div class="price-box">
-                      <del>$5.00</del>
-                      <p class="price">$4.00</p>
+                      <del><?= $display_products->toRupiah($item->price); ?></del>
+                      <p class="price"><?= $display_products->toRupiah($display_products->getDiscount($item->price, $item->discount)); ?></p>
                     </div>
 
                   </div>
 
                 </div>
-
-                <div class="showcase">
-
-                  <a href="#" class="showcase-img-box">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/2.jpg" alt="men's hoodies t-shirt" class="showcase-img"
-                      width="75" height="75">
-                  </a>
-
-                  <div class="showcase-content">
-
-                    <a href="#">
-                      <h4 class="showcase-title">men's hoodies t-shirt</h4>
-                    </a>
-                    <div class="showcase-rating">
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star-half-outline"></ion-icon>
-                    </div>
-
-                    <div class="price-box">
-                      <del>$17.00</del>
-                      <p class="price">$7.00</p>
-                    </div>
-
-                  </div>
-
-                </div>
-
-                <div class="showcase">
-
-                  <a href="#" class="showcase-img-box">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/3.jpg" alt="girls t-shirt" class="showcase-img" width="75"
-                      height="75">
-                  </a>
-
-                  <div class="showcase-content">
-
-                    <a href="#">
-                      <h4 class="showcase-title">girls t-shirt</h4>
-                    </a>
-                    <div class="showcase-rating">
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star-half-outline"></ion-icon>
-                    </div>
-
-                    <div class="price-box">
-                      <del>$5.00</del>
-                      <p class="price">$3.00</p>
-                    </div>
-
-                  </div>
-
-                </div>
-
-                <div class="showcase">
-
-                  <a href="#" class="showcase-img-box">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/4.jpg" alt="woolen hat for men" class="showcase-img" width="75"
-                      height="75">
-                  </a>
-
-                  <div class="showcase-content">
-
-                    <a href="#">
-                      <h4 class="showcase-title">woolen hat for men</h4>
-                    </a>
-                    <div class="showcase-rating">
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                    </div>
-
-                    <div class="price-box">
-                      <del>$15.00</del>
-                      <p class="price">$12.00</p>
-                    </div>
-
-                  </div>
-
-                </div>
-
+                <?php endforeach; ?>
+                
               </div>
-
             </div>
-
           </div>
-
         </div>
 
 
@@ -1588,206 +1333,41 @@ var_dump($result["success"]);
 
               <div class="showcase-wrapper has-scrollbar">
 
-                <div class="showcase-container">
+              <?php foreach ($new_arrivals as $index => $item): ?>
+                    <?php if ($index === 0 || $index === 4): ?>
+                        <div class="showcase-container">
+                    <?php endif; ?>
 
-                  <div class="showcase">
+                      <div class="showcase">
 
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-1.jpg" alt="relaxed short full sleeve t-shirt" width="70" class="showcase-img">
-                    </a>
+                        <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-img-box">
+                          <img loading="lazy" src="<?= BASE_URL ?>assets/img/products/<?= $display_products->getProductImages($item->thumbnail_id); ?>" alt="<?= $item->name; ?>" width="70" height="70" class="showcase-img">
+                        </a>
 
-                    <div class="showcase-content">
+                        <div class="showcase-content">
 
-                      <a href="#">
-                        <h4 class="showcase-title">Relaxed Short full Sleeve T-Shirt</h4>
-                      </a>
+                          <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>">
+                            <h4 class="showcase-title"><?= $item->name; ?></h4>
+                          </a>
 
-                      <a href="#" class="showcase-category">Clothes</a>
+                          <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-category"><?= $item->category; ?></a>
 
-                      <div class="price-box">
-                        <p class="price">$45.00</p>
-                        <del>$12.00</del>
+                          <div class="price-box">
+                            <p class="price"><?= $display_products->toRupiah($display_products->getDiscount($item->price, $item->discount)); ?></p>
+                            <del><?= $display_products->toRupiah($item->price); ?></del>
+                          </div>
+
+                        </div>
+
                       </div>
 
-                    </div>
+                    <?php if ($index === 3 || $index === 7): ?>
+                        </div>
+                    <?php endif; ?>
 
-                  </div>
-
-                  <div class="showcase">
-                  
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-2.jpg" alt="girls pink embro design top" class="showcase-img" width="70">
-                    </a>
-                  
-                    <div class="showcase-content">
-                  
-                      <a href="#">
-                        <h4 class="showcase-title">Girls pnk Embro design Top</h4>
-                      </a>
-                  
-                      <a href="#" class="showcase-category">Clothes</a>
-                  
-                      <div class="price-box">
-                        <p class="price">$61.00</p>
-                        <del>$9.00</del>
-                      </div>
-                  
-                    </div>
-                  
-                  </div>
-
-                  <div class="showcase">
-                  
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-3.jpg" alt="black floral wrap midi skirt" class="showcase-img"
-                        width="70">
-                    </a>
-                  
-                    <div class="showcase-content">
-                  
-                      <a href="#">
-                        <h4 class="showcase-title">Black Floral Wrap Midi Skirt</h4>
-                      </a>
-                  
-                      <a href="#" class="showcase-category">Clothes</a>
-                  
-                      <div class="price-box">
-                        <p class="price">$76.00</p>
-                        <del>$25.00</del>
-                      </div>
-                  
-                    </div>
-                  
-                  </div>
-
-                  <div class="showcase">
-                  
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shirt-1.jpg" alt="pure garment dyed cotton shirt" class="showcase-img"
-                        width="70">
-                    </a>
-                  
-                    <div class="showcase-content">
-                  
-                      <a href="#">
-                        <h4 class="showcase-title">Pure Garment Dyed Cotton Shirt</h4>
-                      </a>
-                  
-                      <a href="#" class="showcase-category">Mens Fashion</a>
-                  
-                      <div class="price-box">
-                        <p class="price">$68.00</p>
-                        <del>$31.00</del>
-                      </div>
-                  
-                    </div>
-                  
-                  </div>
-
-                </div>
-
-                <div class="showcase-container">
-                
-                  <div class="showcase">
-                
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-5.jpg" alt="men yarn fleece full-zip jacket" class="showcase-img"
-                        width="70">
-                    </a>
-                
-                    <div class="showcase-content">
-                
-                      <a href="#">
-                        <h4 class="showcase-title">MEN Yarn Fleece Full-Zip Jacket</h4>
-                      </a>
-                
-                      <a href="#" class="showcase-category">Winter wear</a>
-                
-                      <div class="price-box">
-                        <p class="price">$61.00</p>
-                        <del>$11.00</del>
-                      </div>
-                
-                    </div>
-                
-                  </div>
-                
-                  <div class="showcase">
-                
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-1.jpg" alt="mens winter leathers jackets" class="showcase-img"
-                        width="70">
-                    </a>
-                
-                    <div class="showcase-content">
-                
-                      <a href="#">
-                        <h4 class="showcase-title">Mens Winter Leathers Jackets</h4>
-                      </a>
-                
-                      <a href="#" class="showcase-category">Winter wear</a>
-                
-                      <div class="price-box">
-                        <p class="price">$32.00</p>
-                        <del>$20.00</del>
-                      </div>
-                
-                    </div>
-                
-                  </div>
-                
-                  <div class="showcase">
-                
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-3.jpg" alt="mens winter leathers jackets" class="showcase-img"
-                        width="70">
-                    </a>
-                
-                    <div class="showcase-content">
-                
-                      <a href="#">
-                        <h4 class="showcase-title">Mens Winter Leathers Jackets</h4>
-                      </a>
-                
-                      <a href="#" class="showcase-category">Jackets</a>
-                
-                      <div class="price-box">
-                        <p class="price">$50.00</p>
-                        <del>$25.00</del>
-                      </div>
-                
-                    </div>
-                
-                  </div>
-                
-                  <div class="showcase">
-                
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shorts-1.jpg" alt="better basics french terry sweatshorts" class="showcase-img"
-                        width="70">
-                    </a>
-                
-                    <div class="showcase-content">
-                
-                      <a href="#">
-                        <h4 class="showcase-title">Better Basics French Terry Sweatshorts</h4>
-                      </a>
-                
-                      <a href="#" class="showcase-category">Shorts</a>
-                
-                      <div class="price-box">
-                        <p class="price">$20.00</p>
-                        <del>$10.00</del>
-                      </div>
-                
-                    </div>
-                
-                  </div>
-                
-                </div>
+              <?php endforeach; ?>
 
               </div>
-
             </div>
 
             <div class="product-showcase">
@@ -1796,204 +1376,41 @@ var_dump($result["success"]);
             
               <div class="showcase-wrapper  has-scrollbar">
             
-                <div class="showcase-container">
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-1.jpg" alt="running & trekking shoes - white" class="showcase-img"
-                        width="70">
+              <?php foreach ($trending as $index => $item): ?>
+
+              <?php if ($index === 0 || $index === 4): ?>
+                  <div class="showcase-container">
+              <?php endif; ?>
+
+                <div class="showcase">
+
+                  <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-img-box">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/products/<?= $display_products->getProductImages($item->thumbnail_id); ?>" alt="<?= $item->name; ?>" width="70" height="70" class="showcase-img">
+                  </a>
+
+                  <div class="showcase-content">
+
+                    <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>">
+                      <h4 class="showcase-title"><?= $item->name; ?></h4>
                     </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Running & Trekking Shoes - White</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Sports</a>
-            
-                      <div class="price-box">
-                        <p class="price">$49.00</p>
-                        <del>$15.00</del>
-                      </div>
-            
+
+                    <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-category"><?= $item->category; ?></a>
+
+                    <div class="price-box">
+                      <p class="price"><?= $display_products->toRupiah($display_products->getDiscount($item->price, $item->discount)); ?></p>
+                      <del><?= $display_products->toRupiah($item->price); ?></del>
                     </div>
-            
+
                   </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-2.jpg" alt="trekking & running shoes - black" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Trekking & Running Shoes - black</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Sports</a>
-            
-                      <div class="price-box">
-                        <p class="price">$78.00</p>
-                        <del>$36.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/party-wear-1.jpg" alt="womens party wear shoes" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Womens Party Wear Shoes</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Party wear</a>
-            
-                      <div class="price-box">
-                        <p class="price">$94.00</p>
-                        <del>$42.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-3.jpg" alt="sports claw women's shoes" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Sports Claw Women's Shoes</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Sports</a>
-            
-                      <div class="price-box">
-                        <p class="price">$54.00</p>
-                        <del>$65.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
+
                 </div>
-            
-                <div class="showcase-container">
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-6.jpg" alt="air tekking shoes - white" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Air Trekking Shoes - white</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Sports</a>
-            
-                      <div class="price-box">
-                        <p class="price">$52.00</p>
-                        <del>$55.00</del>
-                      </div>
-            
-                    </div>
-            
+
+              <?php if ($index === 3 || $index === 7): ?>
                   </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-3.jpg" alt="Boot With Suede Detail" class="showcase-img" width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Boot With Suede Detail</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">boots</a>
-            
-                      <div class="price-box">
-                        <p class="price">$20.00</p>
-                        <del>$30.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-1.jpg" alt="men's leather formal wear shoes" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Men's Leather Formal Wear shoes</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">formal</a>
-            
-                      <div class="price-box">
-                        <p class="price">$56.00</p>
-                        <del>$78.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-2.jpg" alt="casual men's brown shoes" class="showcase-img" width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Casual Men's Brown shoes</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Casual</a>
-            
-                      <div class="price-box">
-                        <p class="price">$50.00</p>
-                        <del>$55.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                </div>
-            
+              <?php endif; ?>
+
+              <?php endforeach; ?>
+                
               </div>
             
             </div>
@@ -2004,207 +1421,44 @@ var_dump($result["success"]);
             
               <div class="showcase-wrapper  has-scrollbar">
             
-                <div class="showcase-container">
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-3.jpg" alt="pocket watch leather pouch" class="showcase-img"
-                        width="70">
+              <?php foreach ($top_rated as $index => $item): ?>
+
+
+              <?php if ($index === 0 || $index === 4): ?>
+                  <div class="showcase-container">
+              <?php endif; ?>
+
+                <div class="showcase">
+
+                  <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-img-box">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/products/<?= $display_products->getProductImages($item->thumbnail_id); ?>" alt="<?= $item->name; ?>" width="70" height="70" class="showcase-img">
+                  </a>
+
+                  <div class="showcase-content">
+
+                    <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>">
+                      <h4 class="showcase-title"><?= $item->name; ?></h4>
                     </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Pocket Watch Leather Pouch</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Watches</a>
-            
-                      <div class="price-box">
-                        <p class="price">$50.00</p>
-                        <del>$34.00</del>
-                      </div>
-            
+
+                    <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-category"><?= $item->category; ?></a>
+
+                    <div class="price-box">
+                      <p class="price"><?= $display_products->toRupiah($display_products->getDiscount($item->price, $item->discount)); ?></p>
+                      <del><?= $display_products->toRupiah($item->price); ?></del>
                     </div>
-            
+
                   </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-3.jpg" alt="silver deer heart necklace" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Silver Deer Heart Necklace</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Jewellery</a>
-            
-                      <div class="price-box">
-                        <p class="price">$84.00</p>
-                        <del>$30.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/perfume.jpg" alt="titan 100 ml womens perfume" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Titan 100 Ml Womens Perfume</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Perfume</a>
-            
-                      <div class="price-box">
-                        <p class="price">$42.00</p>
-                        <del>$10.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/belt.jpg" alt="men's leather reversible belt" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Men's Leather Reversible Belt</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Belt</a>
-            
-                      <div class="price-box">
-                        <p class="price">$24.00</p>
-                        <del>$10.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
+
                 </div>
-            
-                <div class="showcase-container">
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-2.jpg" alt="platinum zircon classic ring" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">platinum Zircon Classic Ring</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">jewellery</a>
-            
-                      <div class="price-box">
-                        <p class="price">$62.00</p>
-                        <del>$65.00</del>
-                      </div>
-            
-                    </div>
-            
+
+              <?php if ($index === 3 || $index === 7): ?>
                   </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-1.jpg" alt="smart watche vital plus" class="showcase-img" width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Smart watche Vital Plus</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">Watches</a>
-            
-                      <div class="price-box">
-                        <p class="price">$56.00</p>
-                        <del>$78.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shampoo.jpg" alt="shampoo conditioner packs" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">shampoo conditioner packs</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">cosmetics</a>
-            
-                      <div class="price-box">
-                        <p class="price">$20.00</p>
-                        <del>$30.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                  <div class="showcase">
-            
-                    <a href="#" class="showcase-img-box">
-                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-1.jpg" alt="rose gold peacock earrings" class="showcase-img"
-                        width="70">
-                    </a>
-            
-                    <div class="showcase-content">
-            
-                      <a href="#">
-                        <h4 class="showcase-title">Rose Gold Peacock Earrings</h4>
-                      </a>
-            
-                      <a href="#" class="showcase-category">jewellery</a>
-            
-                      <div class="price-box">
-                        <p class="price">$20.00</p>
-                        <del>$30.00</del>
-                      </div>
-            
-                    </div>
-            
-                  </div>
-            
-                </div>
-            
-              </div>
-            
+              <?php endif; ?>
+
+            <?php endforeach; ?>  
+
+
+            </div>
             </div>
 
           </div>
@@ -2219,175 +1473,71 @@ var_dump($result["success"]);
 
             <h2 class="title">Deal of the day</h2>
 
-            <div class="showcase-wrapper test has-scrollbar">
+            <div class="showcase-wrapper has-scrollbar">
 
-              <div class="showcase-container test">
+            <?php foreach ($deal_of_the_day as $item) : ?>
+              <div class="showcase-container">
 
                 <div class="showcase">
                   
                   <div class="showcase-banner">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shampoo.jpg" alt="shampoo, conditioner & facewash packs" class="showcase-img">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/products/<?= $display_products->getProductImages($item->thumbnail_id); ?>" alt="<?= $item->name; ?>" class="showcase-img" >
                   </div>
 
                   <div class="showcase-content">
                     
                     <div class="showcase-rating">
+                      <?php 
+                      $max_rating = 5;
+                      ?>
+                      <?php for ($i = 1; $i <= $item->rating; $i++) : ?>
                       <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star-outline"></ion-icon>
-                      <ion-icon name="star-outline"></ion-icon>
+                      <?php endfor; ?>
+                      <?php for ($i = $item->rating; $i < $max_rating; $i++) : ?>
+                        <ion-icon name="star-outline"></ion-icon>
+                      <?php endfor; ?>
                     </div>
 
-                    <a href="#">
-                      <h3 class="showcase-title">shampoo, conditioner & facewash packs</h3>
+                    <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>">
+                      <h3 class="showcase-title"><?= $item->name ?></h3>
                     </a>
 
-                    <p class="showcase-desc">
-                      Lorem ipsum dolor sit amet consectetur Lorem ipsum
-                      dolor dolor sit amet consectetur Lorem ipsum dolor
+                    <p class="showcase-desc description-limit" onclick="location.href = '<?= BASE_URL ?>products/detail/<?= $item->code ?>'">
+                      <?= $item->description ?>
                     </p>
 
                     <div class="price-box">
-                      <p class="price">$150.00</p>
+                      <p class="price"><?= $display_products->toRupiah($display_products->getDiscount($item->price, $item->discount)); ?></p>
 
-                      <del>$200.00</del>
+                      <del><?= $display_products->toRupiah($item->price); ?></del>
                     </div>
 
-                    <button class="add-cart-btn">add to cart</button>
+                    <button class="add-cart-btn" onclick="<?= $view_data["results"]["success"] ? "addToCart('$item->code')" : "quick_login()"; ?>">add to cart</button>
 
                     <div class="showcase-status">
                       <div class="wrapper">
                         <p>
-                          already sold: <b>20</b>
+                          already sold: <b><?= $item->sold; ?></b>
                         </p>
 
                         <p>
-                          available: <b>40</b>
+                          available: <b><?= $item->stock; ?></b>
                         </p>
                       </div>
 
-                      <div class="showcase-status-bar"></div>
-                    </div>
-
-                    <div class="countdown-box">
-
-                      <p class="countdown-desc">
-                        Hurry Up! Offer ends in:
-                      </p>
-
-                      <div class="countdown">
-
-                        <div class="countdown-content">
-
-                          <p class="display-number">360</p>
-
-                          <p class="display-text">Days</p>
-
-                        </div>
-
-                        <div class="countdown-content">
-                          <p class="display-number">24</p>
-                          <p class="display-text">Hours</p>
-                        </div>
-
-                        <div class="countdown-content">
-                          <p class="display-number">59</p>
-                          <p class="display-text">Min</p>
-                        </div>
-
-                        <div class="countdown-content">
-                          <p class="display-number">00</p>
-                          <p class="display-text">Sec</p>
-                        </div>
-
+                      <?php 
+                      $percentage = ($item->sold / $item->stock) * 100;
+                      ?>
+                      <!--  -->
+                      <div class="showcase-status-bar">
+                        <div class="bar-status" style="width: <?= $percentage; ?>%;"></div>
                       </div>
-
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
 
-              <div class="showcase-container test">
-              
-                <div class="showcase">
-              
-                  <div class="showcase-banner">
-                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-1.jpg" alt="Rose Gold diamonds Earring" class="showcase-img">
-                  </div>
-              
-                  <div class="showcase-content">
-              
-                    <div class="showcase-rating">
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star"></ion-icon>
-                      <ion-icon name="star-outline"></ion-icon>
-                      <ion-icon name="star-outline"></ion-icon>
-                    </div>
-              
-                    <h3 class="showcase-title">
-                      <a href="#" class="showcase-title">Rose Gold diamonds Earring</a>
-                    </h3>
-              
-                    <p class="showcase-desc">
-                      Lorem ipsum dolor sit amet consectetur Lorem ipsum
-                      dolor dolor sit amet consectetur Lorem ipsum dolor
-                    </p>
-              
-                    <div class="price-box">
-                      <p class="price">$1990.00</p>
-                      <del>$2000.00</del>
-                    </div>
-              
-                    <button class="add-cart-btn">add to cart</button>
-              
-                    <div class="showcase-status">
-                      <div class="wrapper">
-                        <p> already sold: <b>15</b> </p>
-              
-                        <p> available: <b>40</b> </p>
-                      </div>
-              
-                      <div class="showcase-status-bar"></div>
-                    </div>
-              
-                    <div class="countdown-box">
-              
-                      <p class="countdown-desc">Hurry Up! Offer ends in:</p>
-              
-                      <div class="countdown">
-                        <div class="countdown-content">
-                          <p class="display-number">360</p>
-                          <p class="display-text">Days</p>
-                        </div>
-              
-                        <div class="countdown-content">
-                          <p class="display-number">24</p>
-                          <p class="display-text">Hours</p>
-                        </div>
-              
-                        <div class="countdown-content">
-                          <p class="display-number">59</p>
-                          <p class="display-text">Min</p>
-                        </div>
-              
-                        <div class="countdown-content">
-                          <p class="display-number">00</p>
-                          <p class="display-text">Sec</p>
-                        </div>
-                      </div>
-              
-                    </div>
-              
-                  </div>
-              
-                </div>
-              
-              </div>
+            <?php endforeach; ?>
 
             </div>
 
@@ -2401,34 +1551,36 @@ var_dump($result["success"]);
 
           <div class="product-main">
 
-            <h2 class="title">New Products</h2>
+            <h2 class="title">Mini Gallery Products</h2>
 
             <div class="product-grid">
 
-              <div class="showcase">
+              <?php foreach ($mini_products_gallery as $item) : ?>
 
+                <?php 
+                  $images = $display_products->getProductImages($item->thumbnail_id, true);
+                ?>
+              <div class="showcase">
                 <div class="showcase-banner">
 
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-3.jpg" alt="Mens Winter Leathers Jackets" width="300" class="product-img default">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-4.jpg" alt="Mens Winter Leathers Jackets" width="300" class="product-img hover">
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/products/<?= $images[0]->image;?>" alt="<?= $item->name; ?>" width="300" class="product-img default">
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/products/<?= $images[1]->image ?? $images[0]->image; ?>" alt="<?= $item->name; ?>" width="300" class="product-img hover">
 
-                  <p class="showcase-badge">15%</p>
+                  <?php if ($item->discount !== 0) : ?>
+                  <p class="showcase-badge"><?= $item->discount; ?>%</p>
+                  <?php endif; ?>
 
                   <div class="showcase-actions">
 
-                    <button class="btn-action">
+                    <button class="btn-action" onclick="<?= $view_data["results"]["success"] ? "addToWishlist('$item->code')" : "quick_login()"; ?>">
                       <ion-icon name="heart-outline"></ion-icon>
                     </button>
 
-                    <button class="btn-action">
+                    <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="btn-action">
                       <ion-icon name="eye-outline"></ion-icon>
-                    </button>
+                    </a>
 
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-
-                    <button class="btn-action">
+                    <button class="btn-action" onclick="<?= $view_data["results"]["success"] ? "addToCart('$item->code')" : "quick_login()"; ?>">
                       <ion-icon name="bag-add-outline"></ion-icon>
                     </button>
 
@@ -2438,600 +1590,32 @@ var_dump($result["success"]);
 
                 <div class="showcase-content">
 
-                  <a href="#" class="showcase-category">jacket</a>
+                  <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>" class="showcase-category"><?= $item->category; ?></a>
 
-                  <a href="#">
-                    <h3 class="showcase-title">Mens Winter Leathers Jackets</h3>
+                  <a href="<?= BASE_URL ?>products/detail/<?= $item->code ?>">
+                    <h3 class="showcase-title title-limit"><?= $item->name; ?></h3>
                   </a>
 
                   <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
+                  <?php 
+                      $max_rating = 5;
+                      ?>
+                      <?php for ($i = 1; $i <= $item->rating; $i++) : ?>
+                      <ion-icon name="star"></ion-icon>
+                      <?php endfor; ?>
+                      <?php for ($i = $item->rating; $i < $max_rating; $i++) : ?>
+                        <ion-icon name="star-outline"></ion-icon>
+                      <?php endfor; ?>
                   </div>
 
                   <div class="price-box">
-                    <p class="price">$48.00</p>
-                    <del>$75.00</del>
+                      <p class="price"><?= $display_products->toRupiah($display_products->getDiscount($item->price, $item->discount)); ?></p>
+                      <del><?= $display_products->toRupiah($item->price); ?></del>
                   </div>
 
                 </div>
-
               </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shirt-1.jpg" alt="Pure Garment Dyed Cotton Shirt" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shirt-2.jpg" alt="Pure Garment Dyed Cotton Shirt" class="product-img hover"
-                    width="300">
-              
-                  <p class="showcase-badge angle black">sale</p>
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">shirt</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Pure Garment Dyed Cotton Shirt</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$45.00</p>
-                    <del>$56.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-5.jpg" alt="MEN Yarn Fleece Full-Zip Jacket" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-6.jpg" alt="MEN Yarn Fleece Full-Zip Jacket" class="product-img hover"
-                    width="300">
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">Jacket</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">MEN Yarn Fleece Full-Zip Jacket</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$58.00</p>
-                    <del>$65.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-3.jpg" alt="Black Floral Wrap Midi Skirt" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-4.jpg" alt="Black Floral Wrap Midi Skirt" class="product-img hover"
-                    width="300">
-              
-                  <p class="showcase-badge angle pink">new</p>
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">skirt</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Black Floral Wrap Midi Skirt</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$25.00</p>
-                    <del>$35.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-2.jpg" alt="Casual Men's Brown shoes" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-2_1.jpg" alt="Casual Men's Brown shoes" class="product-img hover"
-                    width="300">
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">casual</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Casual Men's Brown shoes</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$99.00</p>
-                    <del>$105.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-3.jpg" alt="Pocket Watch Leather Pouch" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-4.jpg" alt="Pocket Watch Leather Pouch" class="product-img hover"
-                    width="300">
-              
-                  <p class="showcase-badge angle black">sale</p>
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">watches</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Pocket Watch Leather Pouch</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$150.00</p>
-                    <del>$170.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-1.jpg" alt="Smart watche Vital Plus" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-2.jpg" alt="Smart watche Vital Plus" class="product-img hover" width="300">
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">watches</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Smart watche Vital Plus</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$100.00</p>
-                    <del>$120.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/party-wear-1.jpg" alt="Womens Party Wear Shoes" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/party-wear-2.jpg" alt="Womens Party Wear Shoes" class="product-img hover"
-                    width="300">
-              
-                  <p class="showcase-badge angle black">sale</p>
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">party wear</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Womens Party Wear Shoes</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$25.00</p>
-                    <del>$30.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-1.jpg" alt="Mens Winter Leathers Jackets" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-2.jpg" alt="Mens Winter Leathers Jackets" class="product-img hover"
-                    width="300">
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">jacket</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Mens Winter Leathers Jackets</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$32.00</p>
-                    <del>$45.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-2.jpg" alt="Trekking & Running Shoes - black" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-4.jpg" alt="Trekking & Running Shoes - black" class="product-img hover"
-                    width="300">
-              
-                  <p class="showcase-badge angle black">sale</p>
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">sports</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Trekking & Running Shoes - black</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$58.00</p>
-                    <del>$64.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-1.jpg" alt="Men's Leather Formal Wear shoes" class="product-img default"
-                    width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-1_1.jpg" alt="Men's Leather Formal Wear shoes" class="product-img hover"
-                    width="300">
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">formal</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Men's Leather Formal Wear shoes</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$50.00</p>
-                    <del>$65.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
-
-              <div class="showcase">
-              
-                <div class="showcase-banner">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shorts-1.jpg" alt="Better Basics French Terry Sweatshorts"
-                    class="product-img default" width="300">
-                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shorts-2.jpg" alt="Better Basics French Terry Sweatshorts"
-                    class="product-img hover" width="300">
-              
-                  <p class="showcase-badge angle black">sale</p>
-              
-                  <div class="showcase-actions">
-                    <button class="btn-action">
-                      <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="repeat-outline"></ion-icon>
-                    </button>
-              
-                    <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
-                    </button>
-                  </div>
-                </div>
-              
-                <div class="showcase-content">
-                  <a href="#" class="showcase-category">shorts</a>
-              
-                  <h3>
-                    <a href="#" class="showcase-title">Better Basics French Terry Sweatshorts</a>
-                  </h3>
-              
-                  <div class="showcase-rating">
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                    <ion-icon name="star-outline"></ion-icon>
-                  </div>
-              
-                  <div class="price-box">
-                    <p class="price">$78.00</p>
-                    <del>$85.00</del>
-                  </div>
-              
-                </div>
-              
-              </div>
+              <?php endforeach; ?>
 
             </div>
 
@@ -3067,9 +1651,9 @@ var_dump($result["success"]);
 
             <div class="testimonial-card">
 
-              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/testimonial-1.jpg" alt="alan doe" class="testimonial-banner" width="80" height="80">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/ceo-and-founder-atom-fashion-sp.png" alt="alan doe" class="testimonial-banner" width="80" height="80">
 
-              <p class="testimonial-name">Alan Doe</p>
+              <p class="testimonial-name">Atom S. P.</p>
 
               <p class="testimonial-title">CEO & Founder Invision</p>
 
@@ -3234,7 +1818,7 @@ var_dump($result["success"]);
               </a>
 
               <p class="blog-meta">
-                By <cite>Mr Admin</cite> / <time datetime="2022-04-06">Apr 06, 2022</time>
+                By <cite>Mr Joko</cite> / <time datetime="2022-04-06">Apr 06, 2022</time>
               </p>
 
             </div>
@@ -3257,7 +1841,7 @@ var_dump($result["success"]);
               </h3>
           
               <p class="blog-meta">
-                By <cite>Mr Robin</cite> / <time datetime="2022-01-18">Jan 18, 2022</time>
+                By <cite>Mr Fahrul</cite> / <time datetime="2022-01-18">Jan 18, 2022</time>
               </p>
           
             </div>
@@ -3280,7 +1864,7 @@ var_dump($result["success"]);
               </h3>
           
               <p class="blog-meta">
-                By <cite>Mr Selsa</cite> / <time datetime="2022-02-10">Feb 10, 2022</time>
+                By <cite>Mr Lontong</cite> / <time datetime="2022-02-10">Feb 10, 2022</time>
               </p>
           
             </div>
@@ -3303,7 +1887,7 @@ var_dump($result["success"]);
               </h3>
           
               <p class="blog-meta">
-                By <cite>Mr Pawar</cite> / <time datetime="2022-03-15">Mar 15, 2022</time>
+                By <cite>Mr Jhuanes</cite> / <time datetime="2022-03-15">Mar 15, 2022</time>
               </p>
           
             </div>
@@ -3599,24 +2183,24 @@ var_dump($result["success"]);
 
 
   <div class="quick_login_popup overlay">
-	<div class="popup">
-		<h2>Quick Login</h2>
-		<button type="button" class="close" onclick="close_button()" href="#">&times;</button>
-		<div class="content">
+  <div class="popup">
+    <h2>Quick Login</h2>
+    <button type="button" class="close" onclick="close_button()" href="#">&times;</button>
+    <div class="content">
       <div class="form login">
                 <div class="form-content">
                     <form action="" class="form-quick-login" method="POST">
                         <div class="field input-field">
-                            <input type="email" placeholder="Email" class="input" required>
+                            <input type="email" placeholder="Email" name="email" class="input" required>
                         </div>
 
                         <div class="field input-field">
-                            <input type="password" placeholder="Password" class="password" required>
+                            <input type="password" placeholder="Password" name="password" class="password" required>
                             <i class='bx bx-hide eye-icon'></i>
                         </div>
 
                         <div class="form-link">
-                            <a href="/forgot-password" class="forgot-pass">Forgot password?</a>
+                            <a href="#fitur-belom-ada" class="forgot-pass">Forgot password?</a>
                         </div>
 
                         <div class="field button-field">
@@ -3628,18 +2212,18 @@ var_dump($result["success"]);
                 <div class="line"></div>
                 <div class="media-options">
                     <a href="<?= GoogleAuth::getAuthUrl("LOGIN"); ?>" class="field google">
-                        <img src="./assets/img/home/google.png" alt="" class="google-img">
+                        <img src="<?= BASE_URL ?>assets/img/home/google.png" alt="" class="google-img">
                         <span>Login with Google</span>
                     </a>
                 </div>
 
                 
                 <div class="form-link dont-have-account">
-                        <span>Don't have an account? <a href="#" class="link signup-link">Signup</a></span>
+                        <span>Don't have an account? <a href="<?= BASE_URL ?>signup" class="link signup-link">Signup</a></span>
                     </div>
             </div>
-		</div>
-	</div>
+    </div>
+  </div>
 </div>
 
 
@@ -3661,35 +2245,17 @@ var_dump($result["success"]);
 
 
 
-  <!-- <script>
-const scrollContainer = document.querySelector(".showcase-wrapper.test");
-scrollContainer.addEventListener("wheel", (evt) => {
-    evt.preventDefault();
-    scrollContainer.scrollLeft += evt.deltaY;
-});
-  </script> -->
-
-
-  <script src="<?= BASE_URL ?>assets/js/home/popup_login.js"></script>
-  <script>
-    const quick_login_popup = document.querySelector(".quick_login_popup");
-    
-    function quick_login() {
-      quick_login_popup.classList.add("active")
-    }
-
-    function close_button() {
-      quick_login_popup.classList.remove("active")
-    }
-
-    // form-quick-login
-  </script>
-
-
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!--
     - custom js link
   -->
   <script src="<?= BASE_URL ?>assets/js/home/script.js"></script>
+  <script src="<?= BASE_URL ?>assets/js/home/popup-login.js"></script>
+  <script src="<?= BASE_URL ?>assets/js/home/quick-login.js"></script>
+
+  <script src="<?= BASE_URL ?>assets/js/home/wishlist.js"></script>
+  <script src="<?= BASE_URL ?>assets/js/home/cart.js"></script>
 
   <!--
     - ionicon link
@@ -3698,5 +2264,4 @@ scrollContainer.addEventListener("wheel", (evt) => {
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 </body>
-
 </html>

@@ -10,39 +10,49 @@ class Customers {
     protected $db;
     protected $on_action;
     protected $customer_id;
+    protected $full_name;
+    protected $picture;
     protected $email;
     protected $query_status = false;
     protected $error_mess = "";
-    protected $response_payload = [];
 
     protected function __construct() {
         $this->db = new Database();
     }
 
-    private function responses() {
+    private function responses($extra_info) {
         $responses = [
             "meta" => [
                 "action" => $this->on_action
             ],
-            "result" => [
+            "results" => [
                 "success" => $this->query_status,
-                "email" => $this->email
             ]
         ];
+
+        $extra_info_response = [
+            "email" => $this->email,
+            "full_name" => $this->full_name,
+            "picture" => $this->picture
+        ];
+
+        if ($extra_info) {
+            $responses["results"] = array_merge($responses["results"], $extra_info_response);
+        }
         
         if (!$this->query_status) {
-            $responses["result"]["error_mess"] = $this->error_mess;
+            $responses["results"]["error_mess"] = $this->error_mess;
         }
         
         return $responses;
     }
 
-    public function json() {
-        return json_encode($this->responses());
+    public function json($extra_info = true) {
+        return json_encode($this->responses($extra_info));
     }
 
-    public function arrayAssoc() {
-        return $this->responses();
+    public function arrayAssoc($extra_info = true) {
+        return $this->responses($extra_info);
     }
 
 

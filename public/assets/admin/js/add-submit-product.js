@@ -117,7 +117,7 @@ $(".form-add-product").submit(e => {
       processData: false,
       success: response => {
         response = JSON.parse(response)
-        if (response.result.success) {
+        if (response.results.success) {
           alert("Data berhasil ditambahkan. Terimakasih!")
           location.reload()
         }

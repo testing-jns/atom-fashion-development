@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmButtonText: "Dashboard"
   }).then(() => {
     setInterval(() => {
-      location.href = "/user/settings"
+      location.href = "http://11sija1.smk2-yk.sch.id/Kelompok_2/atom-fashion/user/settings"
     }, 200);
   })
 
@@ -59,11 +59,11 @@ form.addEventListener("submit", e => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       const response = JSON.parse(xhr.response)
 
-      if (!response.result.success) {
+      if (!response.results.success) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: response.result.error_mess,
+          text: response.results.error_mess,
         })
         return
       };
@@ -73,7 +73,7 @@ form.addEventListener("submit", e => {
         title: "Login Success!",
       }).then(() => {
         setInterval(() => {
-          location.href = "/user/settings"
+          location.href = "http://11sija1.smk2-yk.sch.id/Kelompok_2/atom-fashion/user/settings"
         }, 200);
       })
 

@@ -8,7 +8,7 @@ require_once "../app/config/initialize-config.php";
 use \core\Database;
 
 
-$db = new Database("hehe");
+$db = new Database();
 
 
 

@@ -47,7 +47,7 @@ class CookieManager {
         try {
             self::$jwt_payloads_response = JWT::decode(self::getCookie(), new Key(JWT_KEY, self::ALGORITHM));
             self::$success = true;
-        } catch (Exception $err) {
+        } catch (SignatureInvalidException $err) {
             self::$error_message = $err->getMessage();
         }
 

@@ -17,6 +17,7 @@ class Database {
 
     private string $error_message = "";
     private bool $query_status = true;
+    private $db_conn_success = false;
 
 
     
@@ -37,12 +38,19 @@ class Database {
         $db_error_mess = $pdo_exc->getMessage();
         $db_error_report = "Datetime : $db_error_date \nMessage : $db_error_mess \n\r";
         file_put_contents(DB_FILE_LOGS, $db_error_report, FILE_APPEND);
-        die("Database error detected!");
+        
+        // Database error detected!
+        $this->__destruct();
+    }
+
+    public function databaseConnection() {
+        return $this->db_conn_success;
     }
 
     public function __construct() {
         try {
             $this->connect();
+            $this->db_conn_success = true;
         } catch (PDOException $pdo_exc) {
             $this->error_report($pdo_exc);
         }

@@ -4,11 +4,16 @@ use core\Controller;
 
 class ProductsController extends Controller {
     public function index(...$args) : void {
-        var_dump($args);
-        // $all_students = $this->model("Students")->getStudents();
-        // $all_students["title"] = "XI SIJA 2 : Home";
-        // $view_data = $all_students;
-        // $this->view("home/index", $view_data);
-        $this->view("products/index");
+        $responses = $this->model("customers/InfoCustomers")->execute()->arrayAssoc();
+        $this->view("products/index", $responses);
+    }
+
+    public function detail(...$args) {
+        $is_product_exist = $this->model("products/DetailProducts")->execute($args["code"]);
+        if (!$is_product_exist) die($this->view("warning/404"));
+
+        $responses = $this->model("customers/InfoCustomers")->execute()->arrayAssoc();
+        $responses["results"]["code"] = $args["code"];
+        $this->view("products/detail", $responses);
     }
 }

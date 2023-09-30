@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
             confirmButtonText: "BACK TO HOME"
         }).then(() => {
             setInterval(() => {
-                location.href = "/"
+                location.href = "http://11sija1.smk2-yk.sch.id/Kelompok_2/atom-fashion"
             }, 200);
         })
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmButtonText: "LOGIN"
     }).then(() => {
         setInterval(() => {
-            location.href = "/login"
+            location.href = "http://11sija1.smk2-yk.sch.id/Kelompok_2/atom-fashion/login"
         }, 200);
     })
 });

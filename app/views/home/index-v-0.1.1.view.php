@@ -1,3 +1,9 @@
+<?php 
+use \middlewares\GoogleAuth;
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,24 +16,31 @@
   <!--
     - favicon
   -->
-  <link rel="shortcut icon" href="<?= BASE_URL ?>assets/home/images/logo/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="<?= BASE_URL ?>assets/img/home/logo/favicon.ico" type="image/x-icon">
 
   <!--
     - custom css link
   -->
-  <link rel="stylesheet" href="<?= BASE_URL ?>assets/home/css/style-prefix.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home/style-prefix.css">
+  <!-- <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home/style-prefix.css"> -->
 
   <!--
     - google font link
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<!-- <style>
+.slider-item {
+  
+}
+
+
+</style> -->
 
 </head>
 
@@ -51,7 +64,7 @@
       </button>
 
       <div class="newsletter-img">
-        <img src="<?= BASE_URL ?>assets/home/images/newsletter.png" alt="subscribe newsletter" width="400" height="400">
+        <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/newsletter.png" alt="subscribe newsletter" width="400" height="400">
       </div>
 
       <div class="newsletter">
@@ -95,7 +108,7 @@
     </button>
 
     <div class="toast-banner">
-      <img src="<?= BASE_URL ?>assets/home/images/products/jewellery-1.jpg" alt="Rose Gold Earrings" width="80" height="70">
+      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-1.jpg" alt="Rose Gold Earrings" width="80" height="70">
     </div>
 
     <div class="toast-detail">
@@ -125,8 +138,7 @@
   -->
 
   <header>
-
-    <div class="header-top">
+    <div class="header-top" style="<?= $view_data["results"]["success"] ? "display: none" : ""; ?>">
 
       <div class="container">
 
@@ -166,22 +178,13 @@
         </div>
 
         <div class="header-top-actions">
-
-          <select name="currency">
-
-            <option value="usd">USD &dollar;</option>
-            <option value="eur">EUR &euro;</option>
-
-          </select>
-
-          <select name="language">
-
-            <option value="en-US">English</option>
-            <option value="es-ES">Espa&ntilde;ol</option>
-            <option value="fr">Fran&ccedil;ais</option>
-
-          </select>
-
+          <div type="button" class="button-action-about me-2 fs-4" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+        data-bs-title="This top tooltip is themed via CSS variables." onclick="location.href = '/about'">
+            <i class="bi bi-info-circle"></i>
+            <span class="tooltiptext">About Atom Fashion</span>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-success" onclick="location.href = '/login'">LogIn</button>
+          <button type="button" class="btn btn-sm btn-success btn-outline-white" onclick="location.href = '/signup'">SignUp</button>
         </div>
 
       </div>
@@ -193,7 +196,7 @@
       <div class="container">
 
         <a href="#" class="header-logo">
-          <img src="<?= BASE_URL ?>assets/home/images/logo/logo.svg" alt="Atom's logo" width="120" height="36">
+          <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/logo/logo.svg" alt="Atom's logo" width="120" height="36">
         </a>
 
         <div class="header-search-container">
@@ -208,18 +211,30 @@
 
         <div class="header-user-actions">
 
-          <button class="action-btn">
-            <ion-icon name="person-outline"></ion-icon>
+          <!-- <button class="trigger_popup">Let me Pop up</button> -->
+
+
+          <!-- tambahin quick_login kalo user blm login -->
+          <button class="action-btn" onclick="<?= $view_data["results"]["success"] ? "location.href = '/user/wishlist'" : "quick_login()"; ?>">
+            <i class="bi bi-heart"></i>
+            <?php if ($view_data["results"]["success"]) : ?>
+            <span class="count">0</span>
+            <?php endif; ?>
           </button>
 
-          <button class="action-btn">
-            <ion-icon name="heart-outline"></ion-icon>
+          <button class="action-btn" onclick="<?= $view_data["results"]["success"] ? "location.href = '/user/cart'" : "quick_login()"; ?>">
+            <i class="bi bi-cart"></i>
+            <?php if ($view_data["results"]["success"]) : ?>
             <span class="count">0</span>
+            <?php endif; ?>
           </button>
 
-          <button class="action-btn">
-            <ion-icon name="bag-handle-outline"></ion-icon>
-            <span class="count">0</span>
+          <button class="action-btn" onclick="location.href = '/user/settings'">
+            <?php if (!empty($view_data["results"]["picture"])): ?>
+              <img src="<?= BASE_URL . "assets/img/users/" . $view_data["results"]["picture"]; ?>" width="45" style="border-radius: 100%;">
+            <?php else: ?>
+              <i class="bi bi-person-circle"></i>
+              <?php endif; ?>
           </button>
 
         </div>
@@ -271,7 +286,7 @@
 
                 <li class="panel-list-item">
                   <a href="#">
-                    <img src="<?= BASE_URL ?>assets/home/images/electronics-banner-1.jpg" alt="headphone collection" width="250"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/electronics-banner-1.jpg" alt="headphone collection" width="250"
                       height="119">
                   </a>
                 </li>
@@ -306,7 +321,7 @@
 
                 <li class="panel-list-item">
                   <a href="#">
-                    <img src="<?= BASE_URL ?>assets/home/images/mens-banner.jpg" alt="men's fashion" width="250" height="119">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/mens-banner.jpg" alt="men's fashion" width="250" height="119">
                   </a>
                 </li>
 
@@ -340,7 +355,7 @@
 
                 <li class="panel-list-item">
                   <a href="#">
-                    <img src="<?= BASE_URL ?>assets/home/images/womens-banner.jpg" alt="women's fashion" width="250" height="119">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/womens-banner.jpg" alt="women's fashion" width="250" height="119">
                   </a>
                 </li>
 
@@ -374,7 +389,7 @@
 
                 <li class="panel-list-item">
                   <a href="#">
-                    <img src="<?= BASE_URL ?>assets/home/images/electronics-banner-2.jpg" alt="mouse collection" width="250" height="119">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/electronics-banner-2.jpg" alt="mouse collection" width="250" height="119">
                   </a>
                 </li>
 
@@ -780,11 +795,12 @@
 
       <div class="container">
 
-        <div class="slider-container has-scrollbar">
+        <div class="slider-container">
+        <!-- <div class="slider-container has-scrollbar"> -->
 
           <div class="slider-item">
 
-            <img src="<?= BASE_URL ?>assets/home/images/banner-1.jpg" alt="women's latest fashion sale" class="banner-img">
+            <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/banner-1.jpg" alt="women's latest fashion sale" class="banner-img">
 
             <div class="banner-content">
 
@@ -804,7 +820,7 @@
 
           <div class="slider-item">
 
-            <img src="<?= BASE_URL ?>assets/home/images/banner-2.jpg" alt="modern sunglasses" class="banner-img">
+            <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/banner-2.jpg" alt="modern sunglasses" class="banner-img">
 
             <div class="banner-content">
 
@@ -824,7 +840,7 @@
 
           <div class="slider-item">
 
-            <img src="<?= BASE_URL ?>assets/home/images/banner-3.jpg" alt="new fashion summer sale" class="banner-img">
+            <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/banner-3.jpg" alt="new fashion summer sale" class="banner-img">
 
             <div class="banner-content">
 
@@ -865,7 +881,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/dress.svg" alt="dress & frock" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/dress.svg" alt="dress & frock" width="30">
             </div>
 
             <div class="category-content-box">
@@ -885,7 +901,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/coat.svg" alt="winter wear" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/coat.svg" alt="winter wear" width="30">
             </div>
 
             <div class="category-content-box">
@@ -905,7 +921,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/glasses.svg" alt="glasses & lens" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/glasses.svg" alt="glasses & lens" width="30">
             </div>
 
             <div class="category-content-box">
@@ -925,7 +941,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/shorts.svg" alt="shorts & jeans" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/shorts.svg" alt="shorts & jeans" width="30">
             </div>
 
             <div class="category-content-box">
@@ -945,7 +961,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/tee.svg" alt="t-shirts" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/tee.svg" alt="t-shirts" width="30">
             </div>
 
             <div class="category-content-box">
@@ -965,7 +981,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/jacket.svg" alt="jacket" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/jacket.svg" alt="jacket" width="30">
             </div>
 
             <div class="category-content-box">
@@ -985,7 +1001,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/watch.svg" alt="watch" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/watch.svg" alt="watch" width="30">
             </div>
 
             <div class="category-content-box">
@@ -1005,7 +1021,7 @@
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="<?= BASE_URL ?>assets/home/images/icons/hat.svg" alt="hat & caps" width="30">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/hat.svg" alt="hat & caps" width="30">
             </div>
 
             <div class="category-content-box">
@@ -1064,7 +1080,7 @@
                 <button class="sidebar-accordion-menu" data-accordion-btn>
 
                   <div class="menu-title-flex">
-                    <img src="<?= BASE_URL ?>assets/home/images/icons/dress.svg" alt="clothes" width="20" height="20"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/dress.svg" alt="clothes" width="20" height="20"
                       class="menu-title-img">
 
                     <p class="menu-title">Clothes</p>
@@ -1116,7 +1132,7 @@
                 <button class="sidebar-accordion-menu" data-accordion-btn>
 
                   <div class="menu-title-flex">
-                    <img src="<?= BASE_URL ?>assets/home/images/icons/shoes.svg" alt="footwear" class="menu-title-img" width="20"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/shoes.svg" alt="footwear" class="menu-title-img" width="20"
                       height="20">
 
                     <p class="menu-title">Footwear</p>
@@ -1168,7 +1184,7 @@
                 <button class="sidebar-accordion-menu" data-accordion-btn>
 
                   <div class="menu-title-flex">
-                    <img src="<?= BASE_URL ?>assets/home/images/icons/jewelry.svg" alt="clothes" class="menu-title-img" width="20"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/jewelry.svg" alt="clothes" class="menu-title-img" width="20"
                       height="20">
 
                     <p class="menu-title">Accessories</p>
@@ -1213,7 +1229,7 @@
                 <button class="sidebar-accordion-menu" data-accordion-btn>
 
                   <div class="menu-title-flex">
-                    <img src="<?= BASE_URL ?>assets/home/images/icons/perfume.svg" alt="perfume" class="menu-title-img" width="20"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/perfume.svg" alt="perfume" class="menu-title-img" width="20"
                       height="20">
 
                     <p class="menu-title">Perfume</p>
@@ -1265,7 +1281,7 @@
                 <button class="sidebar-accordion-menu" data-accordion-btn>
 
                   <div class="menu-title-flex">
-                    <img src="<?= BASE_URL ?>assets/home/images/icons/cosmetics.svg" alt="cosmetics" class="menu-title-img" width="20"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/cosmetics.svg" alt="cosmetics" class="menu-title-img" width="20"
                       height="20">
 
                     <p class="menu-title">Cosmetics</p>
@@ -1317,7 +1333,7 @@
                 <button class="sidebar-accordion-menu" data-accordion-btn>
 
                   <div class="menu-title-flex">
-                    <img src="<?= BASE_URL ?>assets/home/images/icons/glasses.svg" alt="glasses" class="menu-title-img" width="20"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/glasses.svg" alt="glasses" class="menu-title-img" width="20"
                       height="20">
 
                     <p class="menu-title">Glasses</p>
@@ -1355,7 +1371,7 @@
                 <button class="sidebar-accordion-menu" data-accordion-btn>
 
                   <div class="menu-title-flex">
-                    <img src="<?= BASE_URL ?>assets/home/images/icons/bag.svg" alt="bags" class="menu-title-img" width="20" height="20">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/bag.svg" alt="bags" class="menu-title-img" width="20" height="20">
 
                     <p class="menu-title">Bags</p>
                   </div>
@@ -1416,7 +1432,7 @@
                 <div class="showcase">
 
                   <a href="#" class="showcase-img-box">
-                    <img src="<?= BASE_URL ?>assets/home/images/products/1.jpg" alt="baby fabric shoes" width="75" height="75"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/1.jpg" alt="baby fabric shoes" width="75" height="75"
                       class="showcase-img">
                   </a>
 
@@ -1446,7 +1462,7 @@
                 <div class="showcase">
 
                   <a href="#" class="showcase-img-box">
-                    <img src="<?= BASE_URL ?>assets/home/images/products/2.jpg" alt="men's hoodies t-shirt" class="showcase-img"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/2.jpg" alt="men's hoodies t-shirt" class="showcase-img"
                       width="75" height="75">
                   </a>
 
@@ -1475,7 +1491,7 @@
                 <div class="showcase">
 
                   <a href="#" class="showcase-img-box">
-                    <img src="<?= BASE_URL ?>assets/home/images/products/3.jpg" alt="girls t-shirt" class="showcase-img" width="75"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/3.jpg" alt="girls t-shirt" class="showcase-img" width="75"
                       height="75">
                   </a>
 
@@ -1504,7 +1520,7 @@
                 <div class="showcase">
 
                   <a href="#" class="showcase-img-box">
-                    <img src="<?= BASE_URL ?>assets/home/images/products/4.jpg" alt="woolen hat for men" class="showcase-img" width="75"
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/4.jpg" alt="woolen hat for men" class="showcase-img" width="75"
                       height="75">
                   </a>
 
@@ -1559,7 +1575,7 @@
                   <div class="showcase">
 
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/clothes-1.jpg" alt="relaxed short full sleeve t-shirt" width="70" class="showcase-img">
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-1.jpg" alt="relaxed short full sleeve t-shirt" width="70" class="showcase-img">
                     </a>
 
                     <div class="showcase-content">
@@ -1582,7 +1598,7 @@
                   <div class="showcase">
                   
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/clothes-2.jpg" alt="girls pink embro design top" class="showcase-img" width="70">
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-2.jpg" alt="girls pink embro design top" class="showcase-img" width="70">
                     </a>
                   
                     <div class="showcase-content">
@@ -1605,7 +1621,7 @@
                   <div class="showcase">
                   
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/clothes-3.jpg" alt="black floral wrap midi skirt" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-3.jpg" alt="black floral wrap midi skirt" class="showcase-img"
                         width="70">
                     </a>
                   
@@ -1629,7 +1645,7 @@
                   <div class="showcase">
                   
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/shirt-1.jpg" alt="pure garment dyed cotton shirt" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shirt-1.jpg" alt="pure garment dyed cotton shirt" class="showcase-img"
                         width="70">
                     </a>
                   
@@ -1657,7 +1673,7 @@
                   <div class="showcase">
                 
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/jacket-5.jpg" alt="men yarn fleece full-zip jacket" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-5.jpg" alt="men yarn fleece full-zip jacket" class="showcase-img"
                         width="70">
                     </a>
                 
@@ -1681,7 +1697,7 @@
                   <div class="showcase">
                 
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/jacket-1.jpg" alt="mens winter leathers jackets" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-1.jpg" alt="mens winter leathers jackets" class="showcase-img"
                         width="70">
                     </a>
                 
@@ -1705,7 +1721,7 @@
                   <div class="showcase">
                 
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/jacket-3.jpg" alt="mens winter leathers jackets" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-3.jpg" alt="mens winter leathers jackets" class="showcase-img"
                         width="70">
                     </a>
                 
@@ -1729,7 +1745,7 @@
                   <div class="showcase">
                 
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/shorts-1.jpg" alt="better basics french terry sweatshorts" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shorts-1.jpg" alt="better basics french terry sweatshorts" class="showcase-img"
                         width="70">
                     </a>
                 
@@ -1767,7 +1783,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/sports-1.jpg" alt="running & trekking shoes - white" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-1.jpg" alt="running & trekking shoes - white" class="showcase-img"
                         width="70">
                     </a>
             
@@ -1791,7 +1807,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/sports-2.jpg" alt="trekking & running shoes - black" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-2.jpg" alt="trekking & running shoes - black" class="showcase-img"
                         width="70">
                     </a>
             
@@ -1815,7 +1831,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/party-wear-1.jpg" alt="womens party wear shoes" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/party-wear-1.jpg" alt="womens party wear shoes" class="showcase-img"
                         width="70">
                     </a>
             
@@ -1839,7 +1855,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/sports-3.jpg" alt="sports claw women's shoes" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-3.jpg" alt="sports claw women's shoes" class="showcase-img"
                         width="70">
                     </a>
             
@@ -1867,7 +1883,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/sports-6.jpg" alt="air tekking shoes - white" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-6.jpg" alt="air tekking shoes - white" class="showcase-img"
                         width="70">
                     </a>
             
@@ -1891,7 +1907,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/shoe-3.jpg" alt="Boot With Suede Detail" class="showcase-img" width="70">
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-3.jpg" alt="Boot With Suede Detail" class="showcase-img" width="70">
                     </a>
             
                     <div class="showcase-content">
@@ -1914,7 +1930,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/shoe-1.jpg" alt="men's leather formal wear shoes" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-1.jpg" alt="men's leather formal wear shoes" class="showcase-img"
                         width="70">
                     </a>
             
@@ -1938,7 +1954,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/shoe-2.jpg" alt="casual men's brown shoes" class="showcase-img" width="70">
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-2.jpg" alt="casual men's brown shoes" class="showcase-img" width="70">
                     </a>
             
                     <div class="showcase-content">
@@ -1975,7 +1991,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/watch-3.jpg" alt="pocket watch leather pouch" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-3.jpg" alt="pocket watch leather pouch" class="showcase-img"
                         width="70">
                     </a>
             
@@ -1999,7 +2015,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/jewellery-3.jpg" alt="silver deer heart necklace" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-3.jpg" alt="silver deer heart necklace" class="showcase-img"
                         width="70">
                     </a>
             
@@ -2023,7 +2039,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/perfume.jpg" alt="titan 100 ml womens perfume" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/perfume.jpg" alt="titan 100 ml womens perfume" class="showcase-img"
                         width="70">
                     </a>
             
@@ -2047,7 +2063,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/belt.jpg" alt="men's leather reversible belt" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/belt.jpg" alt="men's leather reversible belt" class="showcase-img"
                         width="70">
                     </a>
             
@@ -2075,7 +2091,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/jewellery-2.jpg" alt="platinum zircon classic ring" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-2.jpg" alt="platinum zircon classic ring" class="showcase-img"
                         width="70">
                     </a>
             
@@ -2099,7 +2115,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/watch-1.jpg" alt="smart watche vital plus" class="showcase-img" width="70">
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-1.jpg" alt="smart watche vital plus" class="showcase-img" width="70">
                     </a>
             
                     <div class="showcase-content">
@@ -2122,7 +2138,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/shampoo.jpg" alt="shampoo conditioner packs" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shampoo.jpg" alt="shampoo conditioner packs" class="showcase-img"
                         width="70">
                     </a>
             
@@ -2146,7 +2162,7 @@
                   <div class="showcase">
             
                     <a href="#" class="showcase-img-box">
-                      <img src="<?= BASE_URL ?>assets/home/images/products/jewellery-1.jpg" alt="rose gold peacock earrings" class="showcase-img"
+                      <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-1.jpg" alt="rose gold peacock earrings" class="showcase-img"
                         width="70">
                     </a>
             
@@ -2185,14 +2201,14 @@
 
             <h2 class="title">Deal of the day</h2>
 
-            <div class="showcase-wrapper has-scrollbar">
+            <div class="showcase-wrapper test has-scrollbar">
 
-              <div class="showcase-container">
+              <div class="showcase-container test">
 
                 <div class="showcase">
                   
                   <div class="showcase-banner">
-                    <img src="<?= BASE_URL ?>assets/home/images/products/shampoo.jpg" alt="shampoo, conditioner & facewash packs" class="showcase-img">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shampoo.jpg" alt="shampoo, conditioner & facewash packs" class="showcase-img">
                   </div>
 
                   <div class="showcase-content">
@@ -2277,12 +2293,12 @@
 
               </div>
 
-              <div class="showcase-container">
+              <div class="showcase-container test">
               
                 <div class="showcase">
               
                   <div class="showcase-banner">
-                    <img src="<?= BASE_URL ?>assets/home/images/products/jewellery-1.jpg" alt="Rose Gold diamonds Earring" class="showcase-img">
+                    <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jewellery-1.jpg" alt="Rose Gold diamonds Earring" class="showcase-img">
                   </div>
               
                   <div class="showcase-content">
@@ -2375,8 +2391,8 @@
 
                 <div class="showcase-banner">
 
-                  <img src="<?= BASE_URL ?>assets/home/images/products/jacket-3.jpg" alt="Mens Winter Leathers Jackets" width="300" class="product-img default">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/jacket-4.jpg" alt="Mens Winter Leathers Jackets" width="300" class="product-img hover">
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-3.jpg" alt="Mens Winter Leathers Jackets" width="300" class="product-img default">
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-4.jpg" alt="Mens Winter Leathers Jackets" width="300" class="product-img hover">
 
                   <p class="showcase-badge">15%</p>
 
@@ -2430,9 +2446,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shirt-1.jpg" alt="Pure Garment Dyed Cotton Shirt" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shirt-1.jpg" alt="Pure Garment Dyed Cotton Shirt" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shirt-2.jpg" alt="Pure Garment Dyed Cotton Shirt" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shirt-2.jpg" alt="Pure Garment Dyed Cotton Shirt" class="product-img hover"
                     width="300">
               
                   <p class="showcase-badge angle black">sale</p>
@@ -2483,9 +2499,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/jacket-5.jpg" alt="MEN Yarn Fleece Full-Zip Jacket" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-5.jpg" alt="MEN Yarn Fleece Full-Zip Jacket" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/jacket-6.jpg" alt="MEN Yarn Fleece Full-Zip Jacket" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-6.jpg" alt="MEN Yarn Fleece Full-Zip Jacket" class="product-img hover"
                     width="300">
               
                   <div class="showcase-actions">
@@ -2534,9 +2550,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/clothes-3.jpg" alt="Black Floral Wrap Midi Skirt" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-3.jpg" alt="Black Floral Wrap Midi Skirt" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/clothes-4.jpg" alt="Black Floral Wrap Midi Skirt" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/clothes-4.jpg" alt="Black Floral Wrap Midi Skirt" class="product-img hover"
                     width="300">
               
                   <p class="showcase-badge angle pink">new</p>
@@ -2587,9 +2603,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shoe-2.jpg" alt="Casual Men's Brown shoes" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-2.jpg" alt="Casual Men's Brown shoes" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shoe-2_1.jpg" alt="Casual Men's Brown shoes" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-2_1.jpg" alt="Casual Men's Brown shoes" class="product-img hover"
                     width="300">
               
                   <div class="showcase-actions">
@@ -2638,9 +2654,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/watch-3.jpg" alt="Pocket Watch Leather Pouch" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-3.jpg" alt="Pocket Watch Leather Pouch" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/watch-4.jpg" alt="Pocket Watch Leather Pouch" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-4.jpg" alt="Pocket Watch Leather Pouch" class="product-img hover"
                     width="300">
               
                   <p class="showcase-badge angle black">sale</p>
@@ -2691,9 +2707,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/watch-1.jpg" alt="Smart watche Vital Plus" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-1.jpg" alt="Smart watche Vital Plus" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/watch-2.jpg" alt="Smart watche Vital Plus" class="product-img hover" width="300">
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/watch-2.jpg" alt="Smart watche Vital Plus" class="product-img hover" width="300">
               
                   <div class="showcase-actions">
                     <button class="btn-action">
@@ -2741,9 +2757,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/party-wear-1.jpg" alt="Womens Party Wear Shoes" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/party-wear-1.jpg" alt="Womens Party Wear Shoes" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/party-wear-2.jpg" alt="Womens Party Wear Shoes" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/party-wear-2.jpg" alt="Womens Party Wear Shoes" class="product-img hover"
                     width="300">
               
                   <p class="showcase-badge angle black">sale</p>
@@ -2794,9 +2810,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/jacket-1.jpg" alt="Mens Winter Leathers Jackets" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-1.jpg" alt="Mens Winter Leathers Jackets" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/jacket-2.jpg" alt="Mens Winter Leathers Jackets" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/jacket-2.jpg" alt="Mens Winter Leathers Jackets" class="product-img hover"
                     width="300">
               
                   <div class="showcase-actions">
@@ -2845,9 +2861,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/sports-2.jpg" alt="Trekking & Running Shoes - black" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-2.jpg" alt="Trekking & Running Shoes - black" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/sports-4.jpg" alt="Trekking & Running Shoes - black" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/sports-4.jpg" alt="Trekking & Running Shoes - black" class="product-img hover"
                     width="300">
               
                   <p class="showcase-badge angle black">sale</p>
@@ -2898,9 +2914,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shoe-1.jpg" alt="Men's Leather Formal Wear shoes" class="product-img default"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-1.jpg" alt="Men's Leather Formal Wear shoes" class="product-img default"
                     width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shoe-1_1.jpg" alt="Men's Leather Formal Wear shoes" class="product-img hover"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shoe-1_1.jpg" alt="Men's Leather Formal Wear shoes" class="product-img hover"
                     width="300">
               
                   <div class="showcase-actions">
@@ -2949,9 +2965,9 @@
               <div class="showcase">
               
                 <div class="showcase-banner">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shorts-1.jpg" alt="Better Basics French Terry Sweatshorts"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shorts-1.jpg" alt="Better Basics French Terry Sweatshorts"
                     class="product-img default" width="300">
-                  <img src="<?= BASE_URL ?>assets/home/images/products/shorts-2.jpg" alt="Better Basics French Terry Sweatshorts"
+                  <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/products/shorts-2.jpg" alt="Better Basics French Terry Sweatshorts"
                     class="product-img hover" width="300">
               
                   <p class="showcase-badge angle black">sale</p>
@@ -3033,13 +3049,13 @@
 
             <div class="testimonial-card">
 
-              <img src="<?= BASE_URL ?>assets/home/images/testimonial-1.jpg" alt="alan doe" class="testimonial-banner" width="80" height="80">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/testimonial-1.jpg" alt="alan doe" class="testimonial-banner" width="80" height="80">
 
               <p class="testimonial-name">Alan Doe</p>
 
               <p class="testimonial-title">CEO & Founder Invision</p>
 
-              <img src="<?= BASE_URL ?>assets/home/images/icons/quotes.svg" alt="quotation" class="quotation-img" width="26">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/icons/quotes.svg" alt="quotation" class="quotation-img" width="26">
 
               <p class="testimonial-desc">
                 Lorem ipsum dolor sit amet consectetur Lorem ipsum
@@ -3058,7 +3074,7 @@
 
           <div class="cta-container">
 
-            <img src="<?= BASE_URL ?>assets/home/images/cta-banner.jpg" alt="summer collection" class="cta-banner">
+            <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/cta-banner.jpg" alt="summer collection" class="cta-banner">
 
             <a href="#" class="cta-content">
 
@@ -3188,7 +3204,7 @@
           <div class="blog-card">
 
             <a href="#">
-              <img src="<?= BASE_URL ?>assets/home/images/blog-1.jpg" alt="Clothes Retail KPIs 2021 Guide for Clothes Executives" width="300" class="blog-banner">
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/blog-1.jpg" alt="Clothes Retail KPIs 2021 Guide for Clothes Executives" width="300" class="blog-banner">
             </a>
 
             <div class="blog-content">
@@ -3210,7 +3226,7 @@
           <div class="blog-card">
           
             <a href="#">
-              <img src="<?= BASE_URL ?>assets/home/images/blog-2.jpg" alt="Curbside fashion Trends: How to Win the Pickup Battle."
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/blog-2.jpg" alt="Curbside fashion Trends: How to Win the Pickup Battle."
                 class="blog-banner" width="300">
             </a>
           
@@ -3233,7 +3249,7 @@
           <div class="blog-card">
           
             <a href="#">
-              <img src="<?= BASE_URL ?>assets/home/images/blog-3.jpg" alt="EBT vendors: Claim Your Share of SNAP Online Revenue."
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/blog-3.jpg" alt="EBT vendors: Claim Your Share of SNAP Online Revenue."
                 class="blog-banner" width="300">
             </a>
           
@@ -3256,7 +3272,7 @@
           <div class="blog-card">
           
             <a href="#">
-              <img src="<?= BASE_URL ?>assets/home/images/blog-4.jpg" alt="Curbside fashion Trends: How to Win the Pickup Battle."
+              <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/blog-4.jpg" alt="Curbside fashion Trends: How to Win the Pickup Battle."
                 class="blog-banner" width="300">
             </a>
           
@@ -3563,11 +3579,57 @@
 
     </div>
 
+
+  <div class="quick_login_popup overlay">
+	<div class="popup">
+		<h2>Quick Login</h2>
+		<button type="button" class="close" onclick="close_button()" href="#">&times;</button>
+		<div class="content">
+      <div class="form login">
+                <div class="form-content">
+                    <form action="" class="form-quick-login" method="POST">
+                        <div class="field input-field">
+                            <input type="email" placeholder="Email" name="email" class="input" required>
+                        </div>
+
+                        <div class="field input-field">
+                            <input type="password" placeholder="Password" name="password" class="password" required>
+                            <i class='bx bx-hide eye-icon'></i>
+                        </div>
+
+                        <div class="form-link">
+                            <a href="#fitur-belom-ada" class="forgot-pass">Forgot password?</a>
+                        </div>
+
+                        <div class="field button-field">
+                            <button>Login</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="line"></div>
+                <div class="media-options">
+                    <a href="<?= GoogleAuth::getAuthUrl("LOGIN"); ?>" class="field google">
+                        <img src="./assets/img/home/google.png" alt="" class="google-img">
+                        <span>Login with Google</span>
+                    </a>
+                </div>
+
+                
+                <div class="form-link dont-have-account">
+                        <span>Don't have an account? <a href="/signup" class="link signup-link">Signup</a></span>
+                    </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+
     <div class="footer-bottom">
 
       <div class="container">
 
-        <img src="<?= BASE_URL ?>assets/home/images/payment.png" alt="payment method" class="payment-img">
+        <img loading="lazy" src="<?= BASE_URL ?>assets/img/home/payment.png" alt="payment method" class="payment-img">
 
         <p class="copyright">
           Copyright &copy; <a href="#">Atom</a> all rights reserved.
@@ -3581,13 +3643,14 @@
 
 
 
-
-
-
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!--
     - custom js link
   -->
-  <script src="<?= BASE_URL ?>assets/home/js/script.js"></script>
+  <script src="<?= BASE_URL ?>assets/js/home/script.js"></script>
+  <script src="<?= BASE_URL ?>assets/js/home/popup-login.js"></script>
+  <script src="<?= BASE_URL ?>assets/js/home/quick-login.js"></script>
 
   <!--
     - ionicon link
@@ -3596,5 +3659,4 @@
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 </body>
-
 </html>

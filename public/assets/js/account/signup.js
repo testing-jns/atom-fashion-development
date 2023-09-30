@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     html: `Please check your email <u>${email_field.value}</u>. Expires in 1 day. Thankyou!`
   }).then(() => {
     setInterval(() => {
-      location.href = "/"
+      location.href = "http://11sija1.smk2-yk.sch.id/Kelompok_2/atom-fashion"
     }, 200);
   })
 
@@ -79,11 +79,11 @@ form.addEventListener("submit", e => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       const response = JSON.parse(xhr.response)
 
-      if (!response.result.success) {
+      if (!response.results.success) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: response.result.error_mess,
+          text: response.results.error_mess,
         }).then(() => {
           setInterval(() => {
             location.href = document.location.pathname
@@ -98,7 +98,7 @@ form.addEventListener("submit", e => {
         html: `Please check your email <u>${email_field.value}</u>. Expires in 1 day. Thankyou!`
       }).then(() => {
         setInterval(() => {
-          location.href = "/"
+          location.href = "http://11sija1.smk2-yk.sch.id/Kelompok_2/atom-fashion"
         }, 200);
       })
 

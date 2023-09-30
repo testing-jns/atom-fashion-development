@@ -19,6 +19,21 @@ pwShowHide.forEach(eyeIcon => {
     })
 })      
 
+
+
+
+const quick_login_popup = document.querySelector(".quick_login_popup");
+
+function quick_login() {
+  quick_login_popup.classList.add("active")
+}
+
+function close_button() {
+  quick_login_popup.classList.remove("active")
+}
+
+
+
 // links.forEach(link => {
 //     link.addEventListener("click", e => {
 //        e.preventDefault(); //preventing form submit

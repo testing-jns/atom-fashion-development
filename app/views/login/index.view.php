@@ -78,7 +78,7 @@ use \middlewares\GoogleAuth;
       </div>
     </div>
 
-    <div class="google-auth-response" data-action="<?= $view_data["meta"]["action"] ?? ""; ?>" data-success="<?= json_encode($view_data["result"]["success"] ?? ""); ?>" data-message="<?= $view_data["result"]["error_mess"] ?? ""; ?>" data-email="<?= $view_data["result"]["email"] ?? ""; ?>"></div>
+    <div class="google-auth-response" data-action="<?= $view_data["meta"]["action"] ?? ""; ?>" data-success="<?= json_encode($view_data["results"]["success"] ?? ""); ?>" data-message="<?= $view_data["results"]["error_mess"] ?? ""; ?>" data-email="<?= $view_data["results"]["email"] ?? ""; ?>"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= BASE_URL ?>assets/js/account/login.js"></script>

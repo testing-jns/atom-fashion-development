@@ -1472,6 +1472,8 @@ body::-webkit-scrollbar-thumb:hover {
 .product-featured .showcase-img {
   width: 100%;
   height: 100%;
+  max-width: 400px;
+  max-height: 200px;
   -o-object-fit: cover;
   object-fit: cover;
 }
@@ -1506,6 +1508,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .product-featured .showcase-desc {
+  cursor: pointer;
   color: var(--sonic-silver);
   font-size: var(--fs-7);
   font-weight: var(--weight-300);
@@ -1584,13 +1587,13 @@ body::-webkit-scrollbar-thumb:hover {
   border-radius: 5px;
 }
 
-.product-featured .showcase-status-bar::before {
+.product-featured .showcase-status-bar .bar-status {
   position: absolute;
   content: "";
   top: 3px;
   left: 3px;
   height: 4px;
-  width: 40%;
+  /* width: 40%; */
   background: var(--salmon-pink);
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -1668,8 +1671,11 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .product-grid .product-img {
+  /* width: 300px;
+  height: 300px; */
   width: 100%;
   height: 100%;
+  max-height: 200px;
   -o-object-fit: cover;
   object-fit: cover;
   -webkit-transition: var(--transition-timing);
@@ -2533,7 +2539,10 @@ footer {
   }
 
   .product-featured .showcase-img {
-    max-width: 450px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    max-width: 400px;
+    max-height: 200px;
     margin: auto;
   }
 
@@ -2941,8 +2950,10 @@ footer {
     width: 100%;
     display: -ms-grid;
     display: grid;
+    /* -ms-grid-columns: 2fr 30px 2fr 30px; */
     -ms-grid-columns: 1fr 30px 1fr 30px 1fr 30px 1fr;
-    grid-template-columns: repeat(4, 1fr);
+    /* grid-template-columns: repeat(4, 1fr); */
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     padding: 30px;
     border: 1px solid var(--cultured);
@@ -3760,5 +3771,20 @@ a {
 
 
 
+.description-limit {
+  /* display: block; */
+  width: 100%;
+  height: 6em;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+}
 
 
+.title-limit {
+  width: 100%;
+  height: 4.5em;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+}
