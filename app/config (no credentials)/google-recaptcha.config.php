@@ -1,0 +1,6 @@
+<?php
+
+define("GOOLE_RECAPTCHA_ENDPOINT", "");
+define("GOOLE_RECAPTCHA_SITE_KEY", "");
+define("GOOLE_RECAPTCHA_SECRET_KEY", "");
+
